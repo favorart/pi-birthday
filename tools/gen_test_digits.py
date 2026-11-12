@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Считает N знаков π (алгоритм Чудновского) и пишет их в текстовый файл
-в том же формате, что и y-cruncher: "3.1415926...".
+"""Computes N digits of π (Chudnovsky algorithm) and writes them to a text file
+in the same format as y-cruncher: "3.1415926...".
 
-Нужен только для проверки build_index.py на маленьком объёме.
-Для настоящего индекса используйте y-cruncher (см. README в tools/).
+Only meant for testing build_index.py on a small amount of data.
+For the real index use y-cruncher (see README).
 
     python gen_test_digits.py 1000000 pi-1m.txt
 """
@@ -13,7 +13,7 @@ import time
 
 
 def pi_digits(n):
-    """floor(pi * 10**n) как целое число."""
+    """floor(pi * 10**n) as an integer."""
     C3_24 = 640320 ** 3 // 24
 
     def bs(a, b):

@@ -58,7 +58,7 @@ body {
   min-height: 340px;
 }
 
-/* --- строка поиска --- */
+/* --- search row --- */
 .search {
   grid-area: search;
   display: flex;
@@ -95,7 +95,7 @@ button {
 button:hover { background: var(--btn-hover); }
 button:disabled { opacity: 0.6; cursor: progress; }
 
-/* --- левая колонка с номерами --- */
+/* --- left column with positions --- */
 .stats {
   grid-area: stats;
   display: flex;
@@ -108,7 +108,7 @@ button:disabled { opacity: 0.6; cursor: progress; }
 .stat-value { font-variant-numeric: tabular-nums; }
 .stat-found .stat-value { color: var(--accent); }
 
-/* --- цифры π --- */
+/* --- digits of π --- */
 .digits-wrap {
   grid-area: digits;
   min-height: 0;
@@ -145,8 +145,17 @@ button:disabled { opacity: 0.6; cursor: progress; }
   color: var(--muted);
 }
 .foot a { color: inherit; }
+#lang {
+  font: inherit;
+  margin-inline-end: 0.5em;
+  padding: 1px 4px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--text);
+}
 
-/* --- телефон: номера строкой над цифрами --- */
+/* --- phone: positions in a row above the digits --- */
 @media (max-width: 640px) {
   :root { --size: 17px; }
   .app {

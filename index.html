@@ -1,28 +1,28 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Дата рождения в π</title>
-  <meta name="description" content="Введите дату рождения — и узнайте, на каком знаке числа π она встречается впервые.">
+  <title>Your birthday in π</title>
+  <meta name="description" content="Enter your date of birth and find out where it first appears in the digits of π.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>π</text></svg>">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app">
     <form class="search" id="form" autocomplete="off">
-      <label for="date" class="invite">Введите вашу дату рождения</label>
-      <input id="date" type="text" inputmode="numeric" placeholder="ДД.ММ.ГГГГ" maxlength="10" spellcheck="false" aria-describedby="status">
-      <button type="submit" id="find">Найти</button>
+      <label for="date" class="invite" data-i18n="invite">Enter your date of birth</label>
+      <input id="date" type="text" inputmode="numeric" placeholder="DD.MM.YYYY" maxlength="10" spellcheck="false" dir="ltr" aria-describedby="status">
+      <button type="submit" id="find" data-i18n="find">Find</button>
     </form>
 
-    <aside class="stats" aria-label="Позиции в числе π">
-      <div class="stat"><span class="stat-label">первая цифра</span><span class="stat-value" id="first">1</span></div>
-      <div class="stat stat-found"><span class="stat-label">найдено на:</span><span class="stat-value" id="found">—</span></div>
-      <div class="stat"><span class="stat-label">последняя цифра</span><span class="stat-value" id="last">—</span></div>
+    <aside class="stats">
+      <div class="stat"><span class="stat-label" data-i18n="first">first digit</span><span class="stat-value" id="first">1</span></div>
+      <div class="stat stat-found"><span class="stat-label" data-i18n="found">found at:</span><span class="stat-value" id="found">—</span></div>
+      <div class="stat"><span class="stat-label" data-i18n="last">last digit</span><span class="stat-value" id="last">—</span></div>
     </aside>
 
-    <section class="digits-wrap">
+    <section class="digits-wrap" dir="ltr">
       <div class="digits" id="digits" aria-live="polite"></div>
     </section>
 
@@ -30,13 +30,11 @@
   </main>
 
   <footer class="foot">
-    Число π, как предполагают, <a href="http://www.etudes.ru/ru/sketches/normal-number-pi/">нормальное</a>:
-    в нём есть любая последовательность цифр. Цифры —
-    <a href="https://pi.delivery/">pi.delivery</a>,
-    <span id="meta-note"></span>
-    <a href="https://github.com/favorart/pi-birthday">исходники и история</a>.
+    <select id="lang" aria-label="Language"></select>
+    <span id="foot-text"></span>
   </footer>
 
+  <script src="i18n.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

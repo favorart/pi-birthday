@@ -1,138 +1,148 @@
-# Графическое приложение на python
+# A GUI application in Python
 
-_Статья о первой, десктопной версии (Python 2.7 + Tkinter). Исходная публикация: https://vk.ru/@33453621-pi-gui-python. Код — [legacy/pi.py](legacy/pi.py)._
+**English** · [Русский](article.ru.md)
 
-Время от времени встаёт передо мной вопрос о написании небольших оконных приложений. Обычно приложения пишу на С++. Но в своё время вместо Qt изучал WindowsAPI, т.к. окна всегда нужны были для Windows, считаю, что нативный интерфейс всегда лучший. Хочется, чтобы всё смотрелось органично. WinAPI позволяет сделать всё, что может Windows, но много чего приходится писать в коде самому, всегда нужны какие-то плюшки и свистульки.
+_An article about the first, desktop version (Python 2.7 + Tkinter), translated from Russian. Original publication: https://vk.ru/@33453621-pi-gui-python. Full code: [legacy/pi.py](legacy/pi.py)._
 
-На WinAPI нельзя мышкой накидать контролы интерфейса, в студии нет дизайнера для этого слоя **:(** (не считая хитрых обходных путей с диалогами вместо форм). Есть, конечно, уровни повыше — MFC и WPF. Но первый имеет очень странную и непростую организацию классов, в которой очень не хочется детально разбираться. А второй прекрасен всем, кроме того, что это C#, т.е. желая писать на С++, нужно использовать managed code и вызывать функции .NET framework.
+Every now and then I need to write a small windowed application. I usually write applications in C++. Back in the day, instead of Qt I learned the Windows API, since my windows were always for Windows, and I believe a native interface is always the best one. I want everything to look organic. WinAPI lets you do anything Windows can do, but a lot has to be written by hand, and there are always some bells and whistles you need.
 
-Бог, с этим всем… Чаще всего проще написать любое приложение на python.
+With WinAPI you cannot drag-and-drop controls with the mouse; Visual Studio has no designer for that layer **:(** (apart from tricky workarounds using dialogs instead of forms). There are higher levels, of course — MFC and WPF. But the first has a very strange and complicated class organization that I really don't want to dig into. And the second is great in every way except that it is C#: if you want to write in C++, you have to use managed code and call .NET framework functions.
 
-Давайте разберёмся так ли это?
+Oh well… Most of the time it is easier to write any application in Python.
+
+Let's see whether that is true.
 
 ### Tkinter
 
-**Tkinter** – это пакет python, предназначенный для работы с библиотекой Tk, написанной на языке программирования Tcl. Этот пакет просто преобразовывает код python в команды на Tcl.
+**Tkinter** is a Python package for working with the Tk library, written in the Tcl programming language. The package simply translates Python code into Tcl commands.
 
-### Виджет
+### Widgets
 
-**Виджет** (**widget**) – элементы интерфейса (Control в терминологии WinAPI) объекты, порожденные встроенными классами.
+A **widget** is an interface element (a Control in WinAPI terms): an object created from the built-in classes.
 
--   `Button` – кнопка
--   `Entry` – однострочное текстовое поле ввода
--   `Frame` — группа виджетов
--   `Label` – область на окне, в которой может располагаться картинка или статичный текст
--   `Text` – многострочное поле ввода
+-   `Button` – a button
+-   `Entry` – a single-line text input
+-   `Frame` – a group of widgets
+-   `Label` – an area of the window that can hold an image or static text
+-   `Text` – a multi-line text input
 
-и др.
+and others.
 
-Любой граф.интерфейс работает в парадигме событийно-ориентированного программирования, т.е. та или иная часть программного кода начинает выполняться лишь тогда, когда случается то или иное событие.
+Any GUI follows the event-driven programming paradigm: a given piece of code runs only when a certain event happens.
 
-```
-//цикл обработки событий в WinAPI - самая главная функция оконного приложения
+```c
+// the event loop in WinAPI - the most important function of a windowed application
 LRESULT CALLBACK WndProc(HWND hWnd, UINT messg, WPARAM wParam, LPARAM lParam)
 {
     switch (messg)
     {
-    case WM_PAINT: //нарисовать окно
+    case WM_PAINT: // paint the window
       onWindowPaint(hWnd);
       break;
-    case WM_DESTROY: //уничтожить окно нажатием на крестик
+    case WM_DESTROY: // destroy the window when the close button is clicked
       PostQuitMessage(0);
       break;
-    case WM_ERASEBKGND: //какие-нибудь ещё события
+    case WM_ERASEBKGND: // some other events
       return 1;
     }
-    return DefWindowProc(hWnd, messg, wParam, lParam); //обработка событий по умолчанию самой ОС
+    return DefWindowProc(hWnd, messg, wParam, lParam); // default handling by the OS itself
 }
 ```
 
-### События
+### Events
 
-События бывают разными, их может вызывать: таймер, пользователь, система, сами виджеты и пр. Событий очень много, для каждого есть обработчик по умолчанию или пустой. При получении события происходит срабатывание определенной части кода программы. Обычно своя логика в программу добавляется в обработчиках событий.
+Events come in many kinds: they can be triggered by a timer, the user, the system, the widgets themselves, and so on. There are a lot of events, and each has a default or empty handler. When an event arrives, a certain part of the program runs. Usually your own logic goes into event handlers.
 
-Минимальное приложение выглядит так:
+A minimal application looks like this:
 
-```
+```python
 try:
     import tkinter as tk    # >= python 3.0
 except ImportError:
     import Tkinter as tk    # >= python 2.7
-root = Tk() # создаём главное окно
-root.mainloop() # запускаем цикл получения и обработки событий
+
+root = tk.Tk()  # create the main window
+root.mainloop() # start the loop that receives and handles events
 ```
 
-В функции `mainloop()` написан бесконечный цикл. Код, написанный после этой функции выполнится только после выключения приложения. Выход из цикла происходит, например, по событию нажатия на крестик.
+`mainloop()` contains an infinite loop. Code written after this call runs only after the application closes. The loop exits, for example, on the event of clicking the close button.
 
-Общий план создания GUI-программы:
+The general plan of a GUI program:
 
--   Создать главное окно.
--   Создать доп. окна и виджеты, выполнить их конфигурацию, добавить виджеты на главное или другие окна.
--   Определить интересующие события и их обработчики — то: куда будет вставлен пользовательский код, и как будет реагировать программа.
--   Запустить цикл обработки событий.
+-   Create the main window.
+-   Create additional windows and widgets, configure them, and add the widgets to the main or other windows.
+-   Define the events of interest and their handlers — that is, where user code goes and how the program reacts.
+-   Start the event loop.
 
-### Конфигурация виджетов
+### Configuring widgets
 
-Создадим первый виджет — статичный текст в окне, менять который пользователь не сможет
+Let's create the first widget — static text in the window that the user cannot change:
 
-```
+```python
 tk.Label(root, text="This label")
 ```
 
-Но текст можно изменять программно, если вместо параметра `text`, подключить строковую переменную, меняя её значение тут же будет меняться и текст на `Label`
+The text can be changed from code, though: instead of the `text` parameter, attach a string variable — changing its value immediately changes the text on the `Label`:
 
-```
-tk.Label(root, textvariable=lb_text, width=10, font=dFont, anchor=tk.NW)
+```python
 lb_text = tk.StringVar()
 lb_text.set("1")
+tk.Label(root, textvariable=lb_text, width=10, font=dFont, anchor=tk.NW)
 ```
 
-Параметр `font` меняет вид шрифта, я заранее подготовил более крупный читаемый шрифт интерфейса:
+Source: [legacy/pi.py, lines 227–230](legacy/pi.py#L227-L230)
 
-```
+The `font` parameter changes the font; I prepared a larger, more readable interface font in advance:
+
+```python
 import tkFont
 dFont = tkFont.Font(family="Arial", size=30)
 ```
 
-Параметр `anchor` определяет выравнивание у виджета — в нашем случае это NORTH-WEST, т.е. текст прижимается к верхнему правому краю виджета.
+Source: [legacy/pi.py, line 211](legacy/pi.py#L211)
 
-Устанавливать свойства объектов не обязательно при их создании.
+The `anchor` parameter sets the widget's alignment — here it is NORTH-WEST, i.e. the text sticks to the top-left corner of the widget.
 
-Обратите внимание, что первым аргументом указывается "хозяин", "мастер" – место, где располагается виджет. В данном случае его можно было не указывать,т.к. по умолчанию это `root`. Однако виджеты не обязательно располагаются прямо на главном окне (`root)`, они могут размещаться и в других виджетах.
+Properties don't have to be set when the object is created.
 
-### Пользовательские обработчики событий
+Note that the first argument is the "owner", the "master" — the place where the widget lives. Here it could be omitted, since it defaults to `root`. But widgets don't have to sit directly on the main window (`root`); they can be placed inside other widgets too.
 
-У функций — обработчиков событий, которые вызываются при наступлении события должен быть один параметр. Обычно его называют `event`(событие).
+### Custom event handlers
 
-С помощью метода `bind`можно связать обработчик с событием библиотеки Tk:
+Event handler functions, which are called when an event occurs, must take one parameter. It is usually called `event`.
 
-```
+The `bind` method connects a handler to a Tk event:
+
+```python
 def bt_find_click(event):
     pass
+
 root.bind('<Return>', bt_find_click)
 ```
 
-Ему передается имя события и вызываемая функция. Событие со всеми его параметрами будет передано в функцию и присвоено аргументу `event`. В данном случае событием является нажатие на клавишу Enter, что обозначается строкой `'<Return>'`.
+Source: [legacy/pi.py, line 210](legacy/pi.py#L210)
 
-### Расположение виджетов в окне
+It takes the event name and the function to call. The event with all its parameters is passed to the function as the `event` argument. Here the event is pressing the Enter key, written as the string `'<Return>'`.
 
-Хотя я отчаянно бежал от WinAPI за графическим редактором интерфейса. У Tkinter из коробки его тоже не оказалось **:(** Сжав зубы, я начал читать, как же разработчики без него живут и, на своё удивление, они вышли из положения довольно удобно и элегантно.
+### Laying out widgets
 
-### Упаковщики
+I had desperately fled from WinAPI in search of a visual interface designer. Tkinter turned out not to have one out of the box either **:(** Gritting my teeth, I started reading how developers live without it and, to my surprise, they have solved the problem quite conveniently and elegantly.
 
-\[Источник: https://habr.com/post/133337/\]
+### Geometry managers
 
-**1 pack()** — это функция, так называемый упаковщик, или менеджер расположения. Он отвечает за то, как виджеты будут располагаться на главном окне. Для каждого виджета нужно вызвать метод упаковщика, иначе он не будет отображён. Всего упаковщиков три:
+\[Source: https://habr.com/post/133337/\]
 
-pack автоматически размещает виджеты в родительском окне. Имеет параметры:
+**1 pack()** is a function called a packer, or geometry manager. It decides how widgets are arranged in the main window. The packer must be called for every widget, otherwise the widget is not shown. There are three packers in total:
 
-side – с какого бока добавлять очередной элемент,
+pack places widgets in the parent window automatically. Its parameters:
 
-fill – растягивать ли его в каком-то направлениях до границ окна,
+side – which side to add the next element from,
 
-expand – замостить ли весь родительский объект данным виджетом.
+fill – whether to stretch it to the window's edges in some direction,
 
-```
+expand – whether the widget should fill the whole parent.
+
+```python
 from Tkinter import *
 root = Tk()
 Button(root, text = '1').pack(side = 'left')
@@ -143,17 +153,17 @@ Button(root, text = '5').pack(fill = 'both')
 root.mainloop()
 ```
 
-<!-- КАРТИНКА №1: 1-pack.jpg — перетащи файл сюда вместо этой строки -->
+<!-- IMAGE #1: 1-pack.jpg — drop the file here in place of this line -->
 
-**2 grid()** размещает виджеты на сетке. Основные параметры:
+**2 grid()** places widgets on a grid. Main parameters:
 
-row/column – строка/столбец в сетке,
+row/column – the row/column in the grid,
 
-rowspan/columnspan – сколько строк/столбцов занимает виджет.
+rowspan/columnspan – how many rows/columns the widget spans,
 
-sticky — как растягивать виджет вместе с увеличением ячейки, в которой он находится: к каким краям ячейки NWSE приклеивать виджет.
+sticky – how the widget stretches as its cell grows: which cell edges (N, W, S, E) it sticks to.
 
-```
+```python
 from Tkinter import *
 root = Tk()
 Button(root, text = '1').grid(row = 1, column = 1)
@@ -162,11 +172,11 @@ Button(root, text = '__3__').grid(row = 2, column = 1, columnspan = 2)
 root.mainloop()
 ```
 
-<!-- КАРТИНКА №2: 2-grid.jpg — перетащи файл сюда вместо этой строки -->
+<!-- IMAGE #2: 2-grid.jpg — drop the file here in place of this line -->
 
-**3 place()** позволяет размещать виджеты в указанных координатах с указанными размерами. Основные параметры: x, y, width, height.
+**3 place()** puts widgets at given coordinates with given sizes. Main parameters: x, y, width, height.
 
-```
+```python
 from Tkinter import *
 root = Tk()
 Button(root, text = '1').place(x = 10, y = 10, width = 30)
@@ -175,40 +185,40 @@ Button(root, text = '__3__').place(x = 20, y = 40)
 root.mainloop()
 ```
 
-<!-- КАРТИНКА №3: 3-place.jpg — перетащи файл сюда вместо этой строки -->
+<!-- IMAGE #3: 3-place.jpg — drop the file here in place of this line -->
 
-Пока Вы не вызвали какой-то упаковщик для виджета, логично, что он не отображается.
+Until you call a packer for a widget, it is, naturally, not shown.
 
-### Постановка задачи
+### The task
 
-Теперь о примере, реализацию которого я хочу Вам рассказать.
+Now about the example whose implementation I want to tell you about.
 
-Существует гипотеза о том, что число π — [нормальное](http://www.etudes.ru/ru/sketches/normal-number-pi), т.е., что в нём можно найти любую наперёд заданную последовательности из чисел, конечной длины.
+There is a hypothesis that π is a [normal number](http://www.etudes.ru/ru/sketches/normal-number-pi), i.e. that any given finite sequence of digits can be found in it.
 
-Чтобы удивить детей и взрослых на [фестивали науки](http://www.festivalnauki.ru) подглядели вот такой [аттракцион](http://www.etudes.ru/ru/sketches/normal-number-pi/): _вводишь дату своего рождения, а программа говорит на каком символе в строке π её можно найти_.
+To amaze children and adults at a [science festival](http://www.festivalnauki.ru), we borrowed this [attraction](http://www.etudes.ru/ru/sketches/normal-number-pi/): _you enter your date of birth, and the program tells you at which digit of π it can be found_.
 
-Соответственно, нужно было посчитать π с точностью до достаточно много знаков, пройтись по всем датам от 1го года Н.Э. до 9999 года Н.Э, и найти их ближайшие смещения в строке π.
+So we had to compute π to quite a lot of digits, go through all dates from year 1 AD to year 9999 AD, and find their first offsets in the digits of π.
 
-### Подсчёт π
+### Computing π
 
-Готовая программка по подсчёту π была найдена в [интернетах](http://www.cyberforum.ru/qbasic/thread1923079.html#post10542354 "http://www.cyberforum.ru/qbasic/thread1923079.html#post10542354"). На ней было подсчитано 3 миллиарда знаков после запятой. Получился текстовый файл размером почти 3 Гб.
+A ready-made program for computing π was found [on the internet](http://www.cyberforum.ru/qbasic/thread1923079.html#post10542354). It computed 3 billion digits after the decimal point. The result was a text file of almost 3 GB.
 
-Далее оказалось, что python 2.7, на котором я обычно пишу программки [не дружит](https://ozymaxx.github.io/blog/2018/05/29/python-strftime "https://ozymaxx.github.io/blog/2018/05/29/python-strftime") с датами до 1900 года. Для перечисления дат была взята библиотека [arrow](http://arrow.readthedocs.io), которая прекрасно справилась:
+Then it turned out that Python 2.7, which I usually write small programs in, [doesn't get along](https://ozymaxx.github.io/blog/2018/05/29/python-strftime) with dates before 1900. To enumerate the dates I took the [arrow](http://arrow.readthedocs.io) library, which handled it perfectly:
 
-```
+```python
 start_date = arrow.Arrow(0001, 1, 1), end_date = arrow.Arrow(9999, 12, 30)
 with open('dates.txt', 'w') as dates:
-        for single_date in arrow.Arrow.range('day', start_date, end_date): 
+        for single_date in arrow.Arrow.range('day', start_date, end_date):
             print >>dates, single_date.format(fmt='DDMMYYYY')
 ```
 
-Был сгенерирован файл со всеми возможными датами с четырёхзначным положительным годом, с учётом високосных и пр.
+This generated a file with all possible dates with a four-digit positive year, taking leap years and so on into account.
 
-Далее нужно было записать даты ключами в словарь, пройтись по всем подстрокам π, и значениями в этот словарь записать — смещения, относительно десятичной точки, первых появлений каждой даты.
+Next, the dates had to become keys of a dictionary; then go through all substrings of π and store as values the offsets (relative to the decimal point) of the first occurrence of each date.
 
-Оказалось, что python 2.7 также имеет ограничения по величине значения итератора [оператора](https://stackoverflow.com/questions/39470012/python-overflow-error-iter-index-too-large "https://stackoverflow.com/questions/39470012/python-overflow-error-iter-index-too-large") `range()`, код вышел таким:
+It turned out that Python 2.7 also limits the iterator value of the [`range()`](https://stackoverflow.com/questions/39470012/python-overflow-error-iter-index-too-large) operator, so the code came out like this:
 
-```
+```python
 def window(seq, n=2):
     ''' Returns a sliding window (of width n) over data from the iterable
         s -> (s0,s1,...s[n-1]), (s1,s2,...,sn), ... '''
@@ -239,40 +249,44 @@ fill_db(db, PI, 2000000000, 3000000000, count)
 print
 ```
 
-Всё, подготовительный этап пройден.
+_These preparation scripts are not in `legacy/`; in the web version [tools/build_index.py](tools/build_index.py) replaces them._
 
-Дело осталось за малым — графический интерфейс.
+That's it, the preparation stage is done.
 
-### Графический интерфейс
+All that's left is a small thing — the graphical interface.
 
-План интерфейса следующий:
+### The graphical interface
 
-<!-- КАРТИНКА №4: plan.jpg — перетащи файл сюда вместо этой строки -->
+The interface plan:
 
-1.  Зафиксировать минимальный размер окна.
-2.  Валидируемый ввод даты, чтобы нельзя было ввести некорректную дату.
-3.  Научиться позиционировать текст на `Label`, чтобы он переносился по символам, кроме того, выводилось бы ровно столько текста, сколько помещается на экране.
-4.  Оперативная подгрузка из файла и отображение нужной области числа π.
-5.  Нужно уметь подсвечивать найденную подстроку среди всех символов.
-6.  Размещение объектов. Поместить заголовок из трёх нерастяжимых объектов, а также стальные растяжимые объекты под ними.
-7.  Оптимизация работы приложения.
+<!-- IMAGE #4: plan.jpg — drop the file here in place of this line -->
 
-Начнём с простого.
+1.  Fix the minimum window size.
+2.  Validated date input, so that an invalid date cannot be entered.
+3.  Learn to lay out text on a `Label` so that it wraps by characters and shows exactly as much text as fits on the screen.
+4.  Load the needed part of π from the file on the fly and display it.
+5.  Highlight the found substring among all the characters.
+6.  Layout: a header of three non-stretching objects, and the remaining stretching objects below them.
+7.  Optimize the application.
 
-### Минимальный размер окна
+Let's start with the simple stuff.
 
+### Minimum window size
+
+```python
+root.geometry("1280x640") # default window size at startup
+root.minsize(680, 340)    # minimum window size, so widgets don't collapse into a dot
 ```
-    root.geometry("1280x640") # размер окна по умолчанию при старте приложения
-    root.minsize(680, 340) # минимальный размер окна, чтобы виджеты не схлопывались в точку
-```
 
-### Валидация ввода
+Source: [legacy/pi.py, lines 206–207](legacy/pi.py#L206-L207)
 
-Для ввода даты был выбран виджет `Entry` (аналог Textbox из WinAPI). Логику ввода только даты Н.Э. решил реализовать самостоятельно через валидацию вводимых символов на лету.
+### Input validation
 
-Иллюстрация [общей схемы валидации](https://stackoverflow.com/questions/4140437/interactively-validating-entry-widget-content-in-tkinter "https://stackoverflow.com/questions/4140437/interactively-validating-entry-widget-content-in-tkinter") текстового ввода пользователя в любой виджет библиотеки Tk выглядит следующим образом:
+For entering the date I chose the `Entry` widget (the analogue of a WinAPI Textbox). I decided to implement "AD dates only" input myself, by validating characters on the fly.
 
-```
+An illustration of the [general validation scheme](https://stackoverflow.com/questions/4140437/interactively-validating-entry-widget-content-in-tkinter) for user text input into any Tk widget:
+
+```python
 class Example(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
@@ -318,17 +332,17 @@ class Example(tk.Frame):
 Example(root).pack(fill="both", expand=True)
 ```
 
-Таким образом, из этого всего, мне нужен был только параметр `'%P'` — _совокупный новый ввод_. Если он целиком, при вводе очередного символа, не является датой, то оставляем то, что было введено до последнего символа, иначе добавляем символ к содержимому `Entry`.
+Of all this, I only needed the `'%P'` parameter — _the whole new input_. If, after typing the next character, it is not (the beginning of) a date as a whole, we keep what was typed before that character; otherwise the character is added to the `Entry`.
 
-Для полной даты используем ту же самую arrow.
+For a complete date we use the same arrow library. The resulting `DateEntry` widget: [legacy/pi.py, lines 34–89](legacy/pi.py#L34-L89).
 
-### Настойка виджета числа π
+### Setting up the π widget
 
-Изначально я планировал использовать статический текст для размещения числа Пи. Он хорошо подходит для тех случаев, когда нужно ограничить пользователей в возможностях выделения, копирования и изменения отображённого текста.
+At first I planned to use static text to show π. It fits well when you need to stop users from selecting, copying or changing the displayed text.
 
-Из коробки `Label` не умеет переносить текст на новые строки по-символьно. Был найден [способ](https://www.reddit.com/r/learnpython/comments/6dndqz/how_would_you_make_text_that_automatically_wraps "https://www.reddit.com/r/learnpython/comments/6dndqz/how_would_you_make_text_that_automatically_wraps") переносить по буквам — длина принудительного переноса устанавливалась равной ширине виджета:
+Out of the box, `Label` cannot wrap text onto new lines character by character. I found a [way](https://www.reddit.com/r/learnpython/comments/6dndqz/how_would_you_make_text_that_automatically_wraps) to wrap by letters — the forced wrap length is set to the widget's width:
 
-```
+```python
 class WrappingLabel(tk.Label):
     ''' a type of Label that automatically adjusts the wrap to the size '''
     def __init__(self, master=None, **kwargs):
@@ -338,63 +352,65 @@ class WrappingLabel(tk.Label):
 lbt = WrappingLabel(root, textvariable=lbt_text, font=dFont, anchor=tk.NW, justify=tk.LEFT)
 ```
 
-justify — прижимаем многострочный текст к левому краю `Label`.
+justify — align multi-line text to the left edge of the `Label`.
 
-Далее нужно было уменьшать предлагаемый к отображению текст в соответствии с объёмом, которой можно отобразить на экране.
+Next, the text to display had to be cut down to the amount that fits on the screen.
 
-Для этого я начал писать новый велосипед с перехватыванием события изменения размеров главного окна:
+For that I started reinventing another wheel, intercepting the main window's resize event:
 
-```
+```python
 class WrappingLabel(tk.Label):
     ''' a type of Label that automatically adjusts the wrap to the size '''
     def __init__(self, master=None, **kwargs):
         tk.Label.__init__(self, master, **kwargs)
-        self.bind('<Configure>', self.fit)         # перехват события вставки и изменения текста
-        self.font = tkFont.nametofont(self["font"])                   # получение шрифта виджета
-        self.font_height = self.font.metrics('linespace')             # высота шрифта в пикселях
-    
+        self.bind('<Configure>', self.fit)         # intercept the text insert/change event
+        self.font = tkFont.nametofont(self["font"])                   # the widget's font
+        self.font_height = self.font.metrics('linespace')             # font height in pixels
+
     def fit(self, event):
-        # ширину виджета в символах получаем из события
+        # widget width from the event
         max_width = event.width
-        # число строк, влезает по высоте, с учётом шрифта
+        # number of lines that fit vertically, given the font
         max_height = event.height / self.font_height
-        # изменённый текст
+        # the changed text
         text = lbt_text.get()
-        # текущая ширина текста в символах
+        # current text width
         actual_width = self.font.measure(text)
-        # уменьшаем текст, пока он полностью не влезет в виджет
+        # shrink the text until it fits into the widget entirely
         while (actual_width > (max_width * max_height) and len(text) > 1):
             text = text[:-1]
             actual_width = font.measure(text + "...")
-        # запоминаем полученный результат
+        # remember the result
         lbt_text.set(text + '...')
-        # продолжаем переносить по-символьно внутри виджета
+        # keep wrapping by characters inside the widget
         return self.config(wraplength=self.winfo_width())
-last_event_H, last_event_W = 0, 0 # старые размеры lbt - высота и ширина
+
+last_event_H, last_event_W = 0, 0 # previous lbt size - height and width
+
 def sizing(event):
     ''' Main window size changing Event handler '''
     global last_event_H, last_event_W
     if (event.width == last_event_W and event.height == last_event_H):
-        return # если размер не изменился
+        return # the size has not changed
     last_event_H, last_event_W = event.height, event.width
-    # вызываем событие вручную, для подгонки вставленного текста
+    # fire the event manually to fit the inserted text
     lbt.event_generate("<Configure>", when="now",
                        width=lbt.winfo_width(), height=lbt.winfo_height())
 # ...
-root.bind("<Configure>", sizing) # соединяем пользовательский обработчик с событием
+root.bind("<Configure>", sizing) # connect the custom handler to the event
 ```
 
-В итоге, пришлось отказаться от виджета `Label`. В первую очередь из-за невозможности подкрашивания найденной подстроки из коробки. Пришлось бы создавать динамический `Label` поверх статического, вычислять координаты положения подстроки в окне, располагать там новый `Label` с новым цветом…
+In the end I had to give up on the `Label` widget — first of all because it cannot color the found substring out of the box. I would have had to create a dynamic `Label` on top of the static one, compute the coordinates of the substring in the window, and place a new `Label` with a new color there…
 
-Ох…
+Ugh…
 
-### Виджет Text для числа π
+### The Text widget for π
 
-Более мощный виджет `Text` c возможностями форматирования областей текста и более тонкой настройкой.
+`Text` is a more powerful widget, with formatting for regions of text and finer control.
 
-Благодаря п[утеводной нити всех программистов и единственному светлому лучику](http://stackoverflow.com) во тьме и разочаровании всего сущего, где мне подсказали [статью](https://stackoverflow.com/questions/40992931/python-easiest-way-to-define-multiple-global-variables "https://stackoverflow.com/questions/40992931/python-easiest-way-to-define-multiple-global-variables") с аналогичным кейсом, к решению которого я приступил в предыдущем параграфе, а также [документации](https://www.tutorialspoint.com/python/tk_text.htm) к Tkinter, моя мечта осуществилась:
+Thanks to the [guiding thread of all programmers and the only ray of light](http://stackoverflow.com) in the darkness and disappointment of all things, where I was pointed to a [post](https://stackoverflow.com/questions/40992931/python-easiest-way-to-define-multiple-global-variables) with a similar case to the one I had started in the previous section, and to the Tkinter [documentation](https://www.tutorialspoint.com/python/tk_text.htm), my dream came true:
 
-```
+```python
 class WrappingLabel(tk.Text):
     ''' a type of Text that automatically adjusts the wrap to the size '''
     def __init__(self, master=None, **kwargs):
@@ -402,7 +418,7 @@ class WrappingLabel(tk.Text):
         self.bind('<Configure>', self.onFit)
         self.font = tkFont.nametofont(self["font"])
         self.font_height = 46.8 # self.font.metrics('linespace')
-    
+
     def onFit(self, event):
         global LONG_ARRAY, lb_first_text, lb_last_no_text, lb_found_no_text
         max_width = event.width
@@ -413,7 +429,7 @@ class WrappingLabel(tk.Text):
         actual_width = self.font.measure(text)
         if (actual_width  > max_width * max_height):
             # the original text won't fit. Keep shrinking until it does
-            ilast = bisect.bisect_left(KeyList(text, key=lambda x,i: 
+            ilast = bisect.bisect_left(KeyList(text, key=lambda x,i:
                                                self.font.measure(text[:i]+ '...')),
                                                max_width * max_height)
             last = (first + ilast) if (ilast > 0) else last
@@ -433,21 +449,25 @@ class WrappingLabel(tk.Text):
 lbt = WrappingLabel(frame, font=dFont, wrap=tk.CHAR, bg=frame["bg"], fg='black')
 ```
 
-Идея осталась та же с перехватом события изменения текста, улучшилась её реализация. Несколько пунктов.
+Source: [legacy/pi.py, lines 101–134](legacy/pi.py#L101-L134); widget creation — [line 248](legacy/pi.py#L248)
 
-1.  Вместо while по всем буквам начиная с последней — бинарный поиск.
+The idea stayed the same — intercepting the text change event — but the implementation improved. A few points.
 
-```
+1.  Binary search instead of a while loop over all letters starting from the last one.
+
+```python
 if (actual_width  > max_width * max_height):
     # the original text won't fit. Keep shrinking until it does
-    ilast = bisect.bisect_left(KeyList(text, key=lambda x,i: 
+    ilast = bisect.bisect_left(KeyList(text, key=lambda x,i:
                                        self.font.measure(text[:i]+ '...')),
                                        max_width * max_height)
 ```
 
-Т.к. бинарный поиск не имеет параметра `предикат` вычисления ключа, по которому нужно сортировать, пришлось написать `обёртку`.
+Source: [legacy/pi.py, lines 117–121](legacy/pi.py#L117-L121)
 
-```
+Since `bisect` has no key parameter for the value to compare by, I had to write a wrapper:
+
+```python
 class KeyList(object):
     ''' bisect doesn't accept a key function, so we build the key into our sequence '''
     def __init__(self, l, key):
@@ -459,107 +479,121 @@ class KeyList(object):
         return self.key(self.l[index], index)
 ```
 
-Вместо буквы — подставляет поиску длину от начала до неё самой.
+Source: [legacy/pi.py, lines 91–99](legacy/pi.py#L91-L99)
 
-2\. Вместо точной высоты шрифта подобрал коэффициент, из-за переносов на новые строки — ширина умноженная на высоту — всё же не точный размер.
+Instead of a letter, it gives the search the width of the text from the beginning up to that letter.
 
+2\. Instead of the exact font height I picked a coefficient: because of line wrapping, width multiplied by height is still not the exact size.
+
+```python
+self.font_height = 46.8   # instead of self.font.metrics('linespace')
 ```
-self.font_height = 46.8   # вместо self.font.metrics('linespace')
-```
 
-Коэффициент максимально близко располагает конец текста к концу виджета, но, конечно, иногда ошибается:
+Source: [legacy/pi.py, line 107](legacy/pi.py#L107)
 
-<!-- КАРТИНКА №5: font_height.jpg — перетащи файл сюда вместо этой строки -->
+The coefficient puts the end of the text as close as possible to the end of the widget, but of course it is sometimes off:
 
-3\. `Text` умеет переносить побуквенно сам.
+<!-- IMAGE #5: font_height.jpg — drop the file here in place of this line -->
 
-```
+3\. `Text` can wrap by characters by itself.
+
+```python
 wrap=tk.CHAR
 ```
 
-4\. `Text` умеет подсвечивать собственные подстроки. Подсветка найденной подстроки в красный цвет:
+4\. `Text` can highlight its own substrings. Highlighting the found substring in red:
 
-```
+```python
 self.tag_add("highlight", "1."+str(index), "1."+str(index+8))
 self.tag_config("highlight", background=frame["bg"], foreground="red")
 ```
 
-5\. Запрещаем любую модификацию этого виджета:
+Source: [legacy/pi.py, lines 130–131](legacy/pi.py#L130-L131)
 
-```
+5\. Forbid any modification of the widget:
+
+```python
 lb3.config(state=tk.DISABLED)
 ```
 
-Чтобы `Text` не выделялся, как и`Label`, зданий фон — `background` — делаем таким же, как цвет главного окна:
+Source: [legacy/pi.py, line 255](legacy/pi.py#L255)
 
-```
+So that `Text` does not stand out, just like a `Label`, its `background` is set to the color of the main window:
+
+```python
 bg=frame["bg"]
 ```
 
-Добавляем некоторые начальные данные в `Text` при старте программы:
+Add some initial data to `Text` at startup:
 
-```
-LONG_ARRAY = read_pi(1,2500) 
+```python
+LONG_ARRAY = read_pi(1,2500)
 lb3.insert(tk.END, LONG_ARRAY)
 ```
 
-Заменяем данные на нужные в обработчике события:
+Source: [legacy/pi.py, line 204](legacy/pi.py#L204) and [line 254](legacy/pi.py#L254)
 
+Replace the data with the needed one in the event handler:
+
+```python
+self.delete(1.0, tk.END)   # first delete the old data, starting from char 0 of line 1,
+self.insert(tk.END, text)  # then insert the new data at the end of the text
 ```
-self.delete(1.0, tk.END)   # сначала удаляют старые данные, начиная с 0го символа 1й строки,
-self.insert(tk.END, text)  # затем вставляю новые данные в строку в конец текста
-```
 
-Как можно видеть данные добавляются не также, как в `Label`, можно добавлять построчно, указывая в какую строку записывать. Я не стал с этим запариваться, работаю лишь с одной строкой.
+Source: [legacy/pi.py, lines 125–126](legacy/pi.py#L125-L126)
 
-В кой-то веке что-то было сделано встроенными средствами, что уже является _большой победой_.
+As you can see, data is added differently than in a `Label`: it can be added line by line, specifying which line to write to. I didn't bother with that and work with a single line only.
 
-Код поиска в базе дат, выполняющийся по клику на кнопку «Найти» или по нажатию Enter, выполнен следующим образом:
+For once, something was done with built-in tools, which is already a _big win_.
 
-```
+The code that searches the dates database, run by clicking the "Find" button or pressing Enter:
+
+```python
 def bt_find_click(event=None):
     global LONG_ARRAY, FN_LOG_DATES, DB
     global lb_first_text, lb_last_no_text, lb_found_no_text, lb3
-    # размещаем в Тексте хоть сколько-то символов Пи
+    # show at least some digits of Pi in the Text
     first, last = 1, 2500
-    # получаем введённую дату
+    # get the entered date
     ddate = tb_date.get()
-    if (not DB.has_key(ddate)): # если дата не введена пользователем
+    if (not DB.has_key(ddate)): # if the user has not entered a date
         lb_found_no_text.set("--")
     else:
-        # получаем смещение этой даты относительно десятичной точки
+        # offset of this date relative to the decimal point
         index = int(DB[ddate])
-        # получаем число отображённых символов в текущий момент в Тексте
+        # number of characters currently shown in the Text
         last = int(lb_last_no_text.get()) - int(lb_first_text.get())
-        # вычисляем случайное положение найденной подстроки для отображения в окне
+        # random position of the found substring on screen
         last_of = random.randint(9, 100) if (last > 100) else 9
         offset = random.randint(10, last - last_of)
-        # вычисляем начало и конец отображаемого фрагмента числа Пи
+        # start and end of the shown fragment of Pi
         first = (index - offset) if (index > offset) else 1
         last = index + last
-        # отображаем смещение найденной даты в соответствующем для этого виджете
+        # show the offset of the found date in its widget
         lb_found_no_text.set(str(index))
-    # отображаем новые границы показанного фрагмента Пи в нужных виджетах
+    # show the new bounds of the fragment in their widgets
     lb_first_text.set(str(first))
     lb_last_no_text.set(str(last))
-    # считываем нужный фрагмент Пи из файла
+    # read the needed fragment of Pi from the file
     LONG_ARRAY = read_pi(first, last-first)
-    
-    lb3.config(state=tk.NORMAL)        # разрешаем редактирование Текста
-    lb3.event_generate("<Configure>",             # здесь мы собственноручно вызываем событие
-                       when="now",                # прямо сейчас
-                       width=lb3.winfo_width(),   # и задаём параметры аргумента Event, а именно
-                       height=lb3.winfo_height()) # актуальную ширину и высоту самого виджета
-    lb3.config(state=tk.DISABLED)      # запрещаем редактирование
+
+    lb3.config(state=tk.NORMAL)        # allow editing the Text
+    lb3.event_generate("<Configure>",             # fire the event ourselves
+                       when="now",                # right now
+                       width=lb3.winfo_width(),   # and set the Event arguments, namely
+                       height=lb3.winfo_height()) # the current width and height of the widget
+    lb3.config(state=tk.DISABLED)      # forbid editing
 ```
 
-Как можно видеть, чтобы модифицировать теперь `Text` даже программно нужно возвращать его сначала в нормальное состояние, менять содержимое, а потом снова отключать возможность модификации.
+Source: [legacy/pi.py, lines 136–162](legacy/pi.py#L136-L162)
 
-Случайное смещение добавлено для того, чтобы явно выделить: для новой даты подсвеченное совпадение является правильным и находится в другом (возможно далёком) фрагменте числа Пи.
+As you can see, to modify the `Text` now, even from code, you first have to return it to the normal state, change the content, and then disable modification again.
 
-Своего рода оптимизацией является то, что подгружается только маленький нужный фрагмент числа Пи. Но при этом считывание происходит быстро и не вызывает задержек в интерфейсе. Хранить в памяти весь огромный файл Пи и считывать его во время старта программы было бы сильным расточительством.
+The random offset makes it obvious that for a new date the highlighted match is correct and lies in a different (possibly distant) fragment of π.
 
-```
+A kind of optimization is that only the small needed fragment of π is loaded. Reading is fast and does not cause delays in the interface. Keeping the whole huge π file in memory and reading it at startup would be very wasteful.
+
+```python
 def read_pi(first,last):
     global FN_PI_STRING
     with open(FN_PI_STRING, 'r') as f_pi:
@@ -572,120 +606,131 @@ def read_pi(first,last):
     return PI
 ```
 
-### Размещение объектов
+Source: [legacy/pi.py, lines 164–173](legacy/pi.py#L164-L173)
 
-Изначально, думал, делать программу с помощью первого самого простого упаковщика — `pack()`. Согласно плану для этого нужно было объединить объекты в группы, чтобы правильно растянуть основной `Text` в размер окна.
+### Layout
 
-Во-первых, выделил в группу `Frame` головную часть из трёх объектов окна: приглашение, ввод-даты и кнопку — `win_header`.
+At first I thought of building the program with the first and simplest packer — `pack()`. According to the plan, this required grouping objects so that the main `Text` would stretch properly to the window size.
 
-```
+First, I put the header of three objects — the prompt, the date input and the button — into a `Frame` group, `win_header`.
+
+```python
 # ...
 win_header = tk.Frame(root, padx=10, pady=2)
-# padx и pady - задал отступы для расположения элементов внутри группы
+# padx and pady - padding for the elements inside the group
 win_header.pack(side=tk.TOP, fill=tk.X)
-# добавить группу на главное окно со стороны верха (TOP)
-# растянуть по горизонтали (Х) на всю ширину окна
-# добавляем в группу Приглашение слева
+# add the group to the main window from the top (TOP)
+# stretch horizontally (X) across the whole window width
+# add the Prompt to the group on the left
 lb_invite = tk.Label(win_header, text="Input your birth date", font=dFont,
                      anchor=tk.NW, width=20)
 lb_invite.pack(side=tk.LEFT)
-# добавляем в группу Entry сразу за Приглашением слева
+# add the Entry to the group right after the Prompt
 lb_date = DateEntry(win_header, font=dFont)
 lb_date.pack(side=tk.LEFT)
-# кнопку прикрепляем справа
+# attach the button on the right
 bt_find = tk.Button(win_header, text="Find", font=dFont, command=bt_find_click, pady=2)
 bt_find.pack(side=tk.RIGHT)
 # ...
 ```
 
-Во-вторых, потребовались группы: основной части `win_body` и внутри неё группа левой колонки `winbl` с тремя номерами символов: первого показанного, начала найденной подстроки с датой и последнего показанного.
+Second, I needed groups for the main part, `win_body`, and inside it the left column `winbl` with three character numbers: the first shown, the start of the found date, and the last shown.
 
-```
+```python
 # ...
 win_body = tk.Frame(root)
 win_body.pack(side=tk.TOP, fill=tk.BOTH)
-# растягиваем группу в оба направления: вертикальное и горизонтальное 
-# слева добавляем группу - колонку с номерами символов
+# stretch the group in both directions: vertical and horizontal
+# on the left add a group - the column with character numbers
 winbl = tk.Frame(win_body, width=10)
 winbl.pack(side=tk.LEFT, fill=tk.BOTH)
-# задаём виджет для номера первого показанного символа
+# widget for the number of the first shown character
 lb_first_no = tk.Label(winbl, textvariable=lb_first_no_text, font=dFont, anchor=tk.NW, width=10)
 lb_first_no.pack(side=tk.TOP, fill=tk.X)
-# задаём виджет для номера символа начала найденной подстроки
+# widget for the number of the character where the found substring starts
 lb_found_no = tk.Label(winbl, textvariable=lb_found_no_text, font=dFont, anchor=tk.NW, width=10)
-# задаём виджет для номера последнего показанного символа
+# widget for the number of the last shown character
 lb_last_no = tk.Label(winbl, textvariable=lb_last_no_text, font=dFont, anchor=tk.NW, width=10)
 lb_last_no.pack(side=tk.BOTTOM, fill=tk.X)
-# задаём основной виджет для отображённого фрагмента числа Пи
+# the main widget for the shown fragment of Pi
 lb_digits = WrappingLabel(win_body, textvariable=lb_digits_text, font=dFont,
                           anchor=tk.NW, justify=tk.LEFT)
 lb_digits.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
-# Растягиваем (expand) этот виджет на всё свободное место в группе,
-# а саму группу растягиваем (fill), на всё свободное место в окне
+# Expand this widget over all free space in the group,
+# and fill the group itself over all free space in the window
 # ...
 ```
 
-Но позднее распробовал упаковщик grid() и сделал всё с помощью него.
+_This `pack()` version did not make it into the final code._
 
-### Табличный упаковщик
+But later I got the hang of the grid() packer and did everything with it.
 
-Создал группу `frame` для всех виджетов главного окна, в которой наметил виртуальных 11 столбцов и 7 строк.
+### The grid packer
 
-Прикинул так — приглашение, ввод-даты и кнопка должны находится в первой строке, при том приглашение должно занимать 4 столбца, ввод-даты идти прямо за ним и занимать 3 столбца, а кнопка должна быть справа и занимать 2 столбца. Разрешил расширяться (sticky) вместе с ячейками, которые они занимают, во всех направлениях.
+I created a `frame` group for all widgets of the main window and laid out a virtual grid of 11 columns and 7 rows in it.
 
-```
+My reasoning: the prompt, the date input and the button go in the first row; the prompt spans 4 columns, the date input comes right after it and spans 3 columns, and the button is on the right and spans 2 columns. I let them stretch (sticky) in all directions together with their cells.
+
+```python
 frame = tk.Frame(root)
 tk.Grid.rowconfigure(root, 0, weight=1)
 tk.Grid.columnconfigure(root, 0, weight=1)
 frame.grid(row=0, column=0, sticky=tk.NSEW)
-# Приглашение
+# Prompt
 lb_invite = tk.Label(frame, text="Input your birth date", font=dFont, anchor=tk.NW)
-lb_invite.grid(column=0, row=0, columnspan=4, sticky=tk.NSEW, pady=0, padx=10) 
-# Ввод-даты
+lb_invite.grid(column=0, row=0, columnspan=4, sticky=tk.NSEW, pady=0, padx=10)
+# Date input
 tb_date = DateEntry(frame, font=dFont)
 tb_date.grid(column=4, row=0, columnspan=3, sticky=tk.NSEW, pady=10)
-# Кнопка
+# Button
 bt_find = tk.Button(frame, text="Find", font=dFont, command=bt_find_click)
 bt_find.grid(column=8, row=0, columnspan=2, sticky=tk.NSEW, pady=0)
 ```
 
-Остальные элементы расставил по аналогии. Как видно, `Text` — `lbt` занимает больше всего места:
+Source: [legacy/pi.py, lines 213–224](legacy/pi.py#L213-L224)
 
-```
-# задаём виджет для номера первого показанного символа
+The other elements were placed the same way. As you can see, the `Text` — `lbt` — takes the most space:
+
+```python
+# widget for the number of the first shown character
 lb_first = tk.Label(frame, textvariable=lb_first_text, width=10)
 lb_first.grid(column=0, row=2, sticky=tk.NSEW)
-# задаём виджет для номера символа начала найденной подстроки
+# widget for the number of the character where the found substring starts
 lb_found_no = tk.Label(frame, textvariable=lb_found_no_text)
 lb_found_no.grid(column=0, row=4, sticky=tk.NSEW)
-# задаём виджет для номера последнего показанного символа
+# widget for the number of the last shown character
 lb_last_no = tk.Label(frame, textvariable=lb_last_no_text)
 lb_last_no.grid(column=0, row=6, sticky=tk.NSEW)
-# задаём основной виджет для отображённого фрагмента числа Пи
+# the main widget for the shown fragment of Pi
 lbt = WrappingLabel(frame)
 lbt.grid(column=1, row=1, columnspan=9, rowspan=5, sticky=tk.NSEW)
 ```
 
-В самом конце установил веса ячеек, чем больше вес, тем сильнее она будет изменять свой размер при масштабировании главного окна.
+Source: [legacy/pi.py, lines 225–249](legacy/pi.py#L225-L249)
 
-```
+At the very end I set the cell weights: the bigger the weight, the more the cell resizes when the main window is scaled.
+
+```python
 for y in range(1,11): tk.Grid.columnconfigure(frame, y, weight=1)
 for x in range(2,6): tk.Grid.rowconfigure(frame, x, weight=1)
 ```
 
-### Оптимизация работы программы
+Source: [legacy/pi.py, lines 250–253](legacy/pi.py#L250-L253)
 
-Когда всё было написано и отлажено, лёгкое тестирование выявило, что старт программы происходил непростительно долго. Всё это из-за чтения текстового файла.
+### Optimizing the program
 
-Хотя удалось избавиться от необходимости считывания файла Пи. Избежать полного считывания базы дат из файла не получится. Она представляет собой таблицу с двумя стобцами — подстрока даты — таб — число-смещение.
+When everything was written and debugged, light testing showed that the program started unforgivably slowly. All because of reading a text file.
 
-Стало быть надо понять — как её считать быстро. Простой эксперимент:
+I did manage to avoid reading the π file. But reading the whole dates database from its file cannot be avoided. It is a table with two columns: the date string, a tab, and the offset.
 
-```
+So I had to find out how to read it fast. A simple experiment:
+
+```python
 from timeit import default_timer as timer
+
 def read_db():
     global FN_DB_DATES
-       
+
     t = timer()
     db = {}
     with open(FN_DB_DATES, 'r') as f:
@@ -693,25 +738,25 @@ def read_db():
         db = { k:v for k,v in pairs }
     elapsed = timer() - t
     print "{} {:.10f} secs.".format("readfile", elapsed)
-    
+
     db1 = {}
     t = timer()
     with open(FN_DB_DATES, mode='r') as infile:
         db1 = dict(row[:2] for row in csv.reader(infile, delimiter="\t"))
     elapsed = timer() - t
     print "{} {:.10f} secs.".format("csv file", elapsed)
-    
+
     t = timer()
-    db2 = pd.read_csv(FN_DB_DATES, header=None, delimiter="\t", 
+    db2 = pd.read_csv(FN_DB_DATES, header=None, delimiter="\t",
                       dtype={'a':str,'b':str}).set_index(0).squeeze().to_dict()
     elapsed = timer() - t
     print "{} {:.10f} secs.".format("pd  file", elapsed)
-    
+
     t = timer()
     db3 = {row[0] : row[1] for row in pd.read_csv(FN_DB_DATES).iterrows()}
     elapsed = timer() - t
     print "{} {:.10f} secs.".format("pd csvrd", elapsed)
-    
+
     t = timer()
     db4 = { k:v for k,v in loadtxt(FN_DB_DATES, delimiter="\t",
                                    dtype={'names': ('date', 'offset'), 'formats': ('S','S')}) }
@@ -720,9 +765,9 @@ def read_db():
     return db
 ```
 
-Замеры времени проводились timeit - стандартными средствами python.
+Timings were taken with timeit, Python's standard tool.
 
-Результаты следующие:
+The results:
 
 ```
 readfile 6.3322045118 secs.
@@ -732,23 +777,25 @@ pd csvrd 350.0057260714 secs.
 loadtxt  41.6930684601 secs.
 ```
 
-Оставляем csv. Всё равно долго.
+csv wins. Still slow. The final `read_db`: [legacy/pi.py, lines 189–193](legacy/pi.py#L189-L193).
 
-Тогда я подкатил тяжёлую артиллерию — многопоточность — считывание текстового файла с датами в фоне, пока загружается форма.
+So I brought in the heavy artillery — multithreading: read the dates text file in the background while the form loads.
 
-```
-# определяем поток, который будет читать текстовый файл
+```python
+# a thread that reads the text file
 class Worker(threading.Thread):
     ''' thread to read the dates DB from the text file '''
     def run(self):
         global DB
         DB = read_db()
-WORKER = Worker() # создаём экземпляр этого потока, который считывает БД из файла 
+WORKER = Worker() # an instance of the thread that reads the DB from the file
 ```
 
-Для такого случая, что при программировании окон довольно частый — когда хотят, чтобы форма не зависала при производстве сложных вычислений, у библиотеки Tk есть специальный функции. Нас интересует `after()`, которая умеет вызывать через 10 секунд работы цикла событий нашу функцию, здесь `listen_for_result()`.
+Source: [legacy/pi.py, lines 27–32](legacy/pi.py#L27-L32)
 
-```
+For this case, which is quite common in GUI programming — keeping the form responsive during heavy computations — Tk has special functions. We need `after()`, which calls our function, here `listen_for_result()`, after 10 milliseconds of the event loop.
+
+```python
 def listen_for_result():
     """ Check if there is something load """
     global WORKER, root
@@ -764,13 +811,15 @@ if __name__ == '__main__':
     root.mainloop()
 ```
 
-Которая пробует завершить поток, если он закончил работу, и если ещё нет, снова ставит Tk на ожидание на 10 секунд.
+Source: [legacy/pi.py, lines 195–200](legacy/pi.py#L195-L200) and [lines 208–209](legacy/pi.py#L208-L209)
 
-Таким образом, параллельно загрузке окна, что тоже тяжеловесная операция происходит загрузка немаленького текстового файла. _Победа_.
+It tries to join the thread if it has finished, and if not, schedules Tk to wait another 10 milliseconds.
 
-осталось одно но, но если пользователь ввёл дату раньше, чем считался файл - что может быть очень врядли, но всё же, ждём, пока закончится работа потока, потом производим поиск в готовой БД:
+So the hefty text file is loaded in parallel with the window, which is also a heavy operation. _Victory_.
 
-```
+One catch remains: if the user enters a date before the file has been read — very unlikely, but still — we wait for the thread to finish and then search the ready database:
+
+```python
 def bt_find_click(event=None):
     # ...
     if WORKER.is_alive():
@@ -778,291 +827,35 @@ def bt_find_click(event=None):
     # ...
 ```
 
-### Полный исходный текст программы
+Source: [legacy/pi.py, lines 140–141](legacy/pi.py#L140-L141)
 
-```
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import os
-import io
-import re
-import sys
-import csv
-import arrow
-import random
-import bisect
-import threading
-import Tkinter as tk
+### Full source code
 
-try:
-    import tkinter as tk    # >= python 3.0
-except ImportError:
-    import Tkinter as tk    # >= python 2.7
-import tkFont
+The full code is in [legacy/pi.py](legacy/pi.py).
 
-LOCAL_STRINGS = {} # перевод программы на разные языки
-FN_PI_STRING = '' # имя файла с предпосчитанными 3 млрд. знаками числа Пи
-FN_LOG_DATES = ''
-FN_DB_DATES = '' # имя файла БД с расположением дат в строке Пи
-LONG_ARRAY = '' # массив для сохранения подстроки Пи, которая отображена в окне
-DB = {} # словарь БД дат-смещений
+<!-- IMAGE #6: interface.jpg — drop the file here in place of this line -->
 
-class Worker(threading.Thread):
-    ''' thread to read the dates DB from the text file '''
-    def run(self):
-        global DB
-        DB = read_db()
-WORKER = Worker()
+### Localization
 
-class DateEntry(tk.Frame):
-    ''' Entry to input validated date only '''
-    def __init__(self, master, frame_look={}, **look):
-        args = dict(relief=tk.SUNKEN, border=1)
-        args.update(frame_look)
-        tk.Frame.__init__(self, master, **args)
-        args = {'relief': tk.FLAT}
-        args.update(look)
-        vcmd = (self.register(self.onValidate), '%P')
-        self.entry = tk.Entry(self, validate="key", validatecommand=vcmd,  **args)
-        self.entry.pack(side=tk.TOP, fill=tk.X)
-    
-    def get(self):
-        return self.entry.get()
-    
-    def onValidate(self, P):
-        if (len(P) > 10):
-            self.bell()
-            return False
-        if (len(P) == 1 and P[0] not in '0123'):
-            self.bell()
-            return False
-        if (len(P) > 1 and (not P[1].isdigit() or \
-            (P[0] == P[1] and P[1] == '0') or int(P[:2]) > 31)):
-            self.bell()
-            return False
-        if (len(P) > 2 and P[2] != '.'):
-            self.bell()
-            return False
-        if (len(P) > 3 and P[3] not in '01'):
-            self.bell()
-            return False
-        if (len(P) > 4):
-            if (not P[4].isdigit() or (P[3] == P[4] and P[4] == '0') or int(P[3:5]) > 12):
-                self.bell()
-                return False
-            if (int(P[:2]) > 29 and P[3:5] == '02'):
-                self.bell()
-                return False
-            if (int(P[:2]) == 31 and P[3:5] in ['04', '06', '09', '11']):
-                self.bell()
-                return False        
-        if (len(P) > 5 and P[5] != '.'):
-            self.bell()
-            return False
-        if (len(P) > 6 and not P[6:].isdigit()):
-            self.bell()
-            return False
-        if (len(P) == 10):
-            try:
-                splt = P.split('.')
-                valid = arrow.Arrow(int(splt[2]),int(splt[1]),int(splt[0]))
-            except ValueError:
-                self.bell()
-                return False
-        return True
+Instead of hard-coded strings, the strings are read from a configuration file: [legacy/pi.py, lines 175–187](legacy/pi.py#L175-L187).
 
-class KeyList(object):
-    ''' bisect doesn't accept a key function, so we build the key into our sequence '''
-    def __init__(self, l, key):
-        self.l = l
-        self.key = key
-    def __len__(self):
-        return len(self.l)
-    def __getitem__(self, index):
-        return self.key(self.l[index], index)
+<!-- IMAGE #7: localize.jpg — drop the file here in place of this line -->
 
-class WrappingLabel(tk.Text):
-    ''' a type of Text that automatically adjusts the wrap to the size '''
-    def __init__(self, master=None, **kwargs):
-        tk.Text.__init__(self, master, **kwargs)
-        self.bind('<Configure>', self.onFit)
-        self.font = tkFont.nametofont(self["font"])
-        self.font_height = 46.8 # self.font.metrics('linespace')
-    
-    def onFit(self, event):
-        global LONG_ARRAY, lb_first_text, lb_last_no_text, lb_found_no_text
-        max_width = event.width
-        max_height = event.height / self.font_height # rough n_lines
-        text = LONG_ARRAY
-        last = int(lb_last_no_text.get())
-        first = int(lb_first_text.get())-1
-        actual_width = self.font.measure(text)
-        if (actual_width  > max_width * max_height):
-            # the original text won't fit. Keep shrinking until it does
-            ilast = bisect.bisect_left(KeyList(text, key=lambda x,i: 
-                                               self.font.measure(text[:i]+ '...')), 
-                                               max_width * max_height)
-            last = (first + ilast) if (ilast > 0) else last
-            text = text[:last-first] + '...'
-        self.config(state=tk.NORMAL)
-        self.delete(1.0, tk.END)
-        self.insert(tk.END, text)
-        if (lb_found_no_text.get().isdigit()):
-            index = (int(lb_found_no_text.get()) - first - 1)
-            self.tag_delete("highlight")
-            self.tag_add("highlight", "1."+str(index), "1."+str(index+8))
-            self.tag_config("highlight", background=frame["bg"], foreground="red")
-        self.config(state=tk.DISABLED)
-        lb_last_no_text.set(str(last))
-        return True
+### Executable
 
-def bt_find_click(event=None):
-    global LONG_ARRAY, FN_LOG_DATES, DB
-    global lb_first_text, lb_last_no_text, lb_found_no_text, lb3
-    first, last = 1, 2500
-    if WORKER.is_alive():
-        WORKER.join()
-    ddate = tb_date.get()
-    if (not DB.has_key(ddate)):
-        lb_found_no_text.set("--")
-    else:
-        index = int(DB[ddate])
-        with open(FN_LOG_DATES, 'a') as f_log:
-            print >>f_log, ddate
-        last = int(lb_last_no_text.get()) - int(lb_first_text.get())
-        last_of = random.randint(9, 100) if (last > 100) else 9
-        offset = random.randint(10, last - last_of)
-        first = (index - offset) if (index > offset) else 1
-        last = index + last
-        lb_found_no_text.set(str(index))
-    lb_first_text.set(str(first))
-    lb_last_no_text.set(str(last))
-    LONG_ARRAY = read_pi(first,last-first)
-    lb3.config(state=tk.NORMAL)
-    lb3.event_generate("<Configure>", when="now",
-                       width=lb3.winfo_width(), height=lb3.winfo_height())
-    lb3.config(state=tk.DISABLED)
-    return
-
-def read_pi(first,last):
-    global FN_PI_STRING
-    with open(FN_PI_STRING, 'r') as f_pi:
-        if (first == 1):
-            f_pi.seek(1)
-            PI = "3."+f_pi.read(last)
-        else:
-            f_pi.seek(first)
-            PI = f_pi.read(last)
-    return PI
-
-def read_config():
-    global FN_LOG_DATES, FN_PI_STRING, FN_DB_DATES, LOCAL_STRINGS
-    with open('config.txt', 'r') as f:
-        config = { line.split('=')[0].strip():
-                   line.split('=')[1].strip().strip('"') for line in f }
-    FN_LANGUAGE = os.path.join(config["lang_dir"],config["language"])
-    FN_LOG_DATES = config["log_dates"]
-    FN_PI_STRING = config["pi_string"]
-    FN_DB_DATES = config["db_file"]
-    with io.open(FN_LANGUAGE, 'r', encoding='utf-8') as f:
-        LOCAL_STRINGS = { line.split('=')[0].strip():
-                          line.split('=')[1].strip().strip('"') for line in f }
-    return
-
-def read_db():
-    global FN_DB_DATES
-    with open(FN_DB_DATES, mode='r') as infile:
-        db = dict(row[:2] for row in csv.reader(infile, delimiter="\t"))
-    return db
-
-def listen_for_result():
-    ''' Check if there is something load '''
-    global WORKER, root
-    WORKER.join(1)
-    if WORKER.is_alive():
-        root.after(10, listen_for_result)
-
-if __name__ == '__main__':
-    read_config()
-    LONG_ARRAY = read_pi(1,2500)
-    root = tk.Tk()
-    root.geometry("1280x640")
-    root.minsize(680, 340)
-    WORKER.start()
-    root.after(10, listen_for_result)
-    root.bind('<Return>', bt_find_click)
-    dFont=tkFont.Font(family="Arial", size=30)
-    root.grid_columnconfigure(0, weight=1)
-    frame = tk.Frame(root)
-    tk.Grid.rowconfigure(root, 0, weight=1)
-    tk.Grid.columnconfigure(root, 0, weight=1)
-    frame.grid(row=0, column=0, sticky=tk.NSEW)
-    lb_invite = tk.Label(frame, text=LOCAL_STRINGS["invitation"], font=dFont, anchor=tk.NW)
-    lb_invite.grid(column=0, row=0, columnspan=4, sticky=tk.NSEW, pady=0, padx=10)
-    tb_date = DateEntry(frame, font=dFont)
-    tb_date.grid(column=4, row=0, columnspan=3, sticky=tk.NSEW, pady=10)
-    tb_date.bind('<Return>', bt_find_click)
-    bt_find = tk.Button(frame, text=LOCAL_STRINGS["button_name"], font=dFont,
-                        command=bt_find_click)
-    bt_find.grid(column=8, row=0, columnspan=2, sticky=tk.NSEW, pady=0)
-    lb_first1 = tk.Label(frame, text=LOCAL_STRINGS["lb1"], font=dFont, anchor=tk.SW)
-    lb_first1.grid(column=0, row=1, sticky=tk.NSEW)
-    lb_first_text = tk.StringVar()
-    lb_first_text.set("1")
-    lb_first = tk.Label(frame, textvariable=lb_first_text, width=10, font=dFont, anchor=tk.NW)
-    lb_first.grid(column=0, row=2, sticky=tk.NSEW)
-    lb_found1 = tk.Label(frame, text=LOCAL_STRINGS["lb2"], font=dFont, anchor=tk.SW)
-    lb_found1.grid(column=0, row=3, sticky=tk.NSEW)
-    lb_found_no_text = tk.StringVar()
-    lb_found_no_text.set("--")
-    lb_found_no = tk.Label(frame, textvariable=lb_found_no_text, font=dFont, anchor=tk.NW)
-    lb_found_no.grid(column=0, row=4, sticky=tk.NSEW)
-    lb_last1 = tk.Label(frame, text=LOCAL_STRINGS["lb3"], font=dFont, anchor=tk.SW)
-    lb_last1.grid(column=0, row=5, sticky=tk.NSEW)
-    lb_last_no_text = tk.StringVar()
-    lb_last_no_text.set("2500")
-    lb_last_no = tk.Label(frame, textvariable=lb_last_no_text, font=dFont, anchor=tk.NW)
-    lb_last_no.grid(column=0, row=6, sticky=tk.NSEW)
-    lb_last_digit_text = tk.StringVar()
-    lb_last_digit_text.set("")
-    lb_last_digit = tk.Label(frame, textvariable=lb_last_digit_text, font=dFont, anchor=tk.NW)
-    lb_last_digit.grid(column=1, row=6, columnspan=9, rowspan=1, sticky=tk.NSEW)  
-    lb3_text = tk.StringVar() 
-    lb3 = WrappingLabel(frame, font=dFont, wrap=tk.CHAR, bg=frame["bg"], fg='black')
-    lb3.grid(column=1, row=1, columnspan=9, rowspan=5, sticky=tk.NSEW)
-    for y in range(1,11):
-        tk.Grid.columnconfigure(frame, y, weight=1)
-    for x in range(2,6):
-        tk.Grid.rowconfigure(frame, x, weight=1)
-    lb3.insert(tk.END, LONG_ARRAY)
-    lb3.config(state=tk.DISABLED)
-    tb_date.focus_set()
-    root.mainloop()
-```
-
-<!-- КАРТИНКА №6: interface.jpg — перетащи файл сюда вместо этой строки -->
-
-### Локализация
-
-Вместо статичных строк, строки считываются из файла конфигурации.
-
-<!-- КАРТИНКА №7: localize.jpg — перетащи файл сюда вместо этой строки -->
-
-### Исполняемый файл
-
-Осталось скомпилировать в .exe — это делается с помощью консольной команды (если у Вас на компьютере стоит anaconda):
+All that's left is to build an .exe — done with a console command (if you have Anaconda installed):
 
 ```
 pyinstaller --onefile pi.py --noconsole
 ```
 
-noconsole — Tk запускается из консоли, то перед запуском формы показывается терминал, который нам не нужен, убираем его данным параметром.
+noconsole — Tk is launched from a console, so a terminal shows up before the form; we don't need it, and this flag removes it.
 
-### Все файлы и код
+### All files and code
 
 [https://cloud.mail.ru/public/81Ua/5GEoX3doW](https://cloud.mail.ru/public/81Ua/5GEoX3doW)
 
-### Использованная литература:
+### References
 
 -   https://stackoverflow.com/questions/30257574/how-to-get-the-widgets-current-x-and-y-coordinates
 -   https://docs.python.org/2.7/library/ttk.html#label-options
@@ -1081,7 +874,6 @@ noconsole — Tk запускается из консоли, то перед з�
 -   https://stackoverflow.com/questions/3950687/how-to-find-out-the-current-widget-size-in-tkinter
 -   https://stackoverflow.com/questions/4140437/interactively-validating-entry-widget-content-in-tkinter
 -   http://effbot.org/tkinterbook/label.htm
--   http://effbot.org/tkinterbook/text.htm
 -   https://www.reddit.com/r/learnpython/comments/6dndqz/how\_would\_you\_make\_text\_that\_automatically\_wraps/
 -   https://stackoverflow.com/questions/25936958/tkinter-entry-validation-not-working
 -   http://effbot.org/tkinterbook/variable.htm
@@ -1095,7 +887,6 @@ noconsole — Tk запускается из консоли, то перед з�
 -   https://arrow.readthedocs.io/en/latest/#arrow.arrow.Arrow
 -   https://docs.python.org/2/library/bisect.html
 -   https://www.tutorialspoint.com/python/file\_seek.htm
--   https://stackoverflow.com/questions/4140437/interactively-validating-entry-widget-content-in-tkinter
 -   https://stackoverflow.com/questions/10624937/convert-datetime-object-to-a-string-of-date-only-in-python
 -   https://stackoverflow.com/questions/14288498/creating-a-loop-for-two-dates/14288620
 -   https://stackoverflow.com/questions/39470012/python-overflow-error-iter-index-too-large

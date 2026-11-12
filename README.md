@@ -1,35 +1,42 @@
-# Дата рождения в π
+# Your birthday in π
 
-**Сайт:** https://favorart.github.io/pi-birthday/
+**English** · [Русский](README.ru.md)
 
-Введите дату рождения, и сайт покажет, на каком знаке числа π она встречается впервые.
-Это веб-версия десктопного приложения на Tkinter, сделанного когда-то для фестиваля науки.
-Как была устроена та, первая версия, — в статье [«Графическое приложение на python»](article.md).
+**Site:** https://favorart.github.io/pi-birthday/
 
-## Как устроена веб-версия
+Enter your date of birth and the site shows where it first appears among the digits of π.
+This is the web version of a desktop Tkinter app once made for a science festival.
+How that first version was built is described in the article [“A GUI application in Python”](article.md).
 
-| Что | Где |
+The interface is available in 10 languages: English, 中文, Español, हिन्दी, العربية, Português, Русский, 日本語, Deutsch, Français.
+The language is picked from the browser settings; it can be switched at the bottom of the page or with `?lang=xx`.
+
+## How the web version works
+
+| What | Where |
 |---|---|
-| Страница | `index.html`, `style.css`, `app.js` — статический сайт для GitHub Pages, сервер не нужен |
-| Индекс «дата → позиция» | `data/idx/00.bin … 99.bin`: по файлу на столетие, 100 лет × 372 ячейки × `uint32`, всего ~14,9 МБ. Браузер скачивает только файл нужного столетия (~149 КБ) |
-| Цифры π для экрана | не хранятся: берутся из [api.pi.delivery](https://pi.delivery/) (до 1000 цифр за запрос). Первые 3000 знаков лежат в `data/start.txt` |
-| Сборка индекса | `tools/build_index.py` |
-| Старое приложение | `legacy/pi.py` (Python 2.7, Tkinter) — как было в статье |
+| Page | `index.html`, `style.css`, `app.js`, `i18n.js` — a static site for GitHub Pages, no server needed |
+| "Date → position" index | `data/idx/00.bin … 99.bin`: one file per century, 100 years × 372 slots × `uint32`, ~14.9 MB in total. The browser downloads only the file for the needed century (~149 KB) |
+| Digits of π for the screen | not stored: fetched from [api.pi.delivery](https://pi.delivery/) (up to 1000 digits per request). The first 3000 digits are in `data/start.txt` |
+| Index builder | `tools/build_index.py` |
+| Old app | `legacy/pi.py` (Python 2.7, Tkinter), as it was in the article |
 
-Позиция — номер первой цифры даты (`ДДММГГГГ`) после запятой: в `3.1415…` первая `1` имеет номер 1.
-Эта нумерация совпадает с `start` в API pi.delivery и со старым приложением.
+A position is the number of the date's first digit (`DDMMYYYY`) after the decimal point: in `3.1415…` the first `1` is number 1.
+This numbering matches `start` in the pi.delivery API and the old app.
 
-## Как пересобрать индекс
+A link like `https://favorart.github.io/pi-birthday/#14.03.1992` searches for the date right away.
 
-1. Скачать [y-cruncher](http://www.numberworld.org/y-cruncher/) и посчитать π до 3 000 000 000 знаков
-   (Custom Compute → Pi → 3 000 000 000 digits, вывод — **десятичный текст**, не `.ycd`).
-   y-cruncher покажет нужный объём памяти. Если он больше RAM, хватит и 2 500 000 000 знаков:
-   по оценке все даты встречаются примерно до 1,6–2 млрд.
-2. Построить индекс (numpy, несколько минут):
+## Rebuilding the index
+
+1. Download [y-cruncher](http://www.numberworld.org/y-cruncher/) and compute π to 3,000,000,000 digits
+   (Custom Compute → Pi → 3,000,000,000 digits, output as **decimal text**, not `.ycd`).
+   y-cruncher shows how much memory it needs. If that exceeds your RAM, 2,500,000,000 digits are enough:
+   by estimate all dates occur before roughly 1.6–2 billion.
+2. Build the index (numpy, a few minutes):
    ```bash
    python tools/build_index.py "Pi - Dec - Chudnovsky.txt" data
    ```
-   Скрипт напишет, сколько дат найдено. Сам файл π после этого можно удалить.
-3. Закоммитить `data/` и запушить: GitHub Pages обновится сам.
+   The script reports how many dates were found. The π file can be deleted afterwards.
+3. Commit `data/` and push: GitHub Pages updates by itself.
 
-Для проверки без y-cruncher: `python tools/gen_test_digits.py 1000000 pi-1m.txt` считает миллион знаков за минуту.
+To test without y-cruncher: `python tools/gen_test_digits.py 1000000 pi-1m.txt` computes a million digits in about a minute.
