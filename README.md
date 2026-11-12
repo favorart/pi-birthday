@@ -19,7 +19,7 @@ The language is picked from the browser settings; it can be switched at the bott
 | "Date → position" index | `data/idx/00.bin … 99.bin`: one file per century, 100 years × 372 slots × `uint32`, ~14.9 MB in total. The browser downloads only the file for the needed century (~149 KB) |
 | Digits of π for the screen | not stored: fetched from [api.pi.delivery](https://pi.delivery/) (up to 1000 digits per request). The first 3000 digits are in `data/start.txt` |
 | Index builder | `tools/build_index.py` |
-| Old app | `legacy/pi.py` (Python 2.7, Tkinter), as it was in the article |
+| Old app | `legacy/pi.py` (Python 2.7, Tkinter), as it was in the article. `legacy/run.sh` runs it on Python 3 (Linux/macOS; needs `python3-tk`) |
 
 A position is the number of the date's first digit (`DDMMYYYY`) after the decimal point: in `3.1415…` the first `1` is number 1.
 This numbering matches `start` in the pi.delivery API and the old app.

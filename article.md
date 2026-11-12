@@ -2,7 +2,7 @@
 
 **English** · [Русский](article.ru.md)
 
-_An article about the first, desktop version (Python 2.7 + Tkinter), translated from Russian. Original publication: https://vk.ru/@33453621-pi-gui-python. Full code: [legacy/pi.py](legacy/pi.py)._
+_A 2018 article about the first, desktop version (Python 2.7 + Tkinter), translated from Russian. Original publication: https://vk.ru/@33453621-pi-gui-python. Full code: [legacy/pi.py](legacy/pi.py); to run it today, use [legacy/run.sh](legacy/run.sh)._
 
 Every now and then I need to write a small windowed application. I usually write applications in C++. Back in the day, instead of Qt I learned the Windows API, since my windows were always for Windows, and I believe a native interface is always the best one. I want everything to look organic. WinAPI lets you do anything Windows can do, but a lot has to be written by hand, and there are always some bells and whistles you need.
 
@@ -850,10 +850,6 @@ pyinstaller --onefile pi.py --noconsole
 ```
 
 noconsole — Tk is launched from a console, so a terminal shows up before the form; we don't need it, and this flag removes it.
-
-### All files and code
-
-[https://cloud.mail.ru/public/81Ua/5GEoX3doW](https://cloud.mail.ru/public/81Ua/5GEoX3doW)
 
 ### References
 

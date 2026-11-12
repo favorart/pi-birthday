@@ -2,3 +2,4 @@
 !data/start.txt
 *.ycd
 __pycache__/
+legacy/run/
