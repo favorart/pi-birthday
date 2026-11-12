@@ -1,7 +1,7 @@
 {
-  "digits": 1000000,
+  "digits": 3000000000,
   "dates_total": 3652059,
-  "dates_found": 36302,
-  "max_position": 999987,
+  "dates_found": 3652059,
+  "max_position": 1669501859,
   "built": "2026-11-12"
 }
