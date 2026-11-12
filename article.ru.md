@@ -153,7 +153,7 @@ Button(root, text = '5').pack(fill = 'both')
 root.mainloop()
 ```
 
-<!-- КАРТИНКА №1: 1-pack.jpg — перетащи файл сюда вместо этой строки -->
+<img width="134" height="116" alt="1-pack" src="https://github.com/user-attachments/assets/8067aec6-e630-430c-a5fb-5b8891f5f66d" />
 
 **2 grid()** размещает виджеты на сетке. Основные параметры:
 
@@ -172,7 +172,7 @@ Button(root, text = '__3__').grid(row = 2, column = 1, columnspan = 2)
 root.mainloop()
 ```
 
-<!-- КАРТИНКА №2: 2-grid.jpg — перетащи файл сюда вместо этой строки -->
+<img width="137" height="94" alt="2-grid" src="https://github.com/user-attachments/assets/1da19342-4b45-406e-ae00-fb29dfd5bc18" />
 
 **3 place()** позволяет размещать виджеты в указанных координатах с указанными размерами. Основные параметры: x, y, width, height.
 
@@ -185,7 +185,7 @@ Button(root, text = '__3__').place(x = 20, y = 40)
 root.mainloop()
 ```
 
-<!-- КАРТИНКА №3: 3-place.jpg — перетащи файл сюда вместо этой строки -->
+<img width="139" height="139" alt="3-place" src="https://github.com/user-attachments/assets/f6ecb75e-e579-4d53-a7a9-653519d72954" />
 
 Пока Вы не вызвали какой-то упаковщик для виджета, логично, что он не отображается.
 
@@ -259,7 +259,7 @@ _Эти подготовительные скрипты в `legacy/` не вош
 
 План интерфейса следующий:
 
-<!-- КАРТИНКА №4: plan.jpg — перетащи файл сюда вместо этой строки -->
+<img width="807" height="579" alt="plan" src="https://github.com/user-attachments/assets/a718d644-af95-4aa8-8da3-48d56f8265bd" />
 
 1.  Зафиксировать минимальный размер окна.
 2.  Валидируемый ввод даты, чтобы нельзя было ввести некорректную дату.
@@ -493,7 +493,7 @@ self.font_height = 46.8   # вместо self.font.metrics('linespace')
 
 Коэффициент максимально близко располагает конец текста к концу виджета, но, конечно, иногда ошибается:
 
-<!-- КАРТИНКА №5: font_height.jpg — перетащи файл сюда вместо этой строки -->
+<img width="1071" height="105" alt="font_height" src="https://github.com/user-attachments/assets/c2254737-5e6c-4251-9eeb-fe905d76fc0d" />
 
 3\. `Text` умеет переносить побуквенно сам.
 
@@ -833,13 +833,13 @@ def bt_find_click(event=None):
 
 Полный код — в [legacy/pi.py](legacy/pi.py).
 
-<!-- КАРТИНКА №6: interface.jpg — перетащи файл сюда вместо этой строки -->
+<img width="1080" height="557" alt="interface" src="https://github.com/user-attachments/assets/81283f68-b27a-4b1d-8242-a384d49153bd" />
 
 ### Локализация
 
 Вместо статичных строк, строки считываются из файла конфигурации: [legacy/pi.py, стр. 175–187](legacy/pi.py#L175-L187).
 
-<!-- КАРТИНКА №7: localize.jpg — перетащи файл сюда вместо этой строки -->
+<img width="1080" height="565" alt="localize" src="https://github.com/user-attachments/assets/36be95e5-22fa-42e1-982e-cf63ec3ea86a" />
 
 ### Исполняемый файл
 
