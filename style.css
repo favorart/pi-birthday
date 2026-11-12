@@ -1,0 +1,162 @@
+:root {
+  --bg: #f0f0ee;
+  --panel: #ffffff;
+  --text: #161616;
+  --muted: #6b6b6b;
+  --line: #c9c9c4;
+  --accent: #d0141e;
+  --accent-ink: #ffffff;
+  --btn: #e4e4e0;
+  --btn-hover: #d8d8d3;
+  --font: "Segoe UI", Arial, system-ui, sans-serif;
+  --size: clamp(17px, 2.4vw, 30px);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17181a;
+    --panel: #202225;
+    --text: #e9e9e6;
+    --muted: #9a9a96;
+    --line: #3a3c40;
+    --accent: #ff5a5f;
+    --accent-ink: #17181a;
+    --btn: #2c2e32;
+    --btn-hover: #36393e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17181a; --panel: #202225; --text: #e9e9e6; --muted: #9a9a96; --line: #3a3c40;
+  --accent: #ff5a5f; --accent-ink: #17181a; --btn: #2c2e32; --btn-hover: #36393e;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--size);
+  display: flex;
+  flex-direction: column;
+}
+
+.app {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "search search"
+    "stats  digits"
+    "status status";
+  gap: 0.4em 0.6em;
+  padding: 0.5em 16px 0.3em;
+  min-height: 340px;
+}
+
+/* --- строка поиска --- */
+.search {
+  grid-area: search;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.invite { flex: 1 1 auto; white-space: nowrap; }
+#date {
+  font: inherit;
+  width: 7.2em;
+  padding: 0.12em 0.35em;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+#date:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+#date.bad { animation: shake 0.25s; border-color: var(--accent); }
+@keyframes shake {
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+button {
+  font: inherit;
+  padding: 0.12em 1em;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--btn);
+  color: var(--text);
+  cursor: pointer;
+}
+button:hover { background: var(--btn-hover); }
+button:disabled { opacity: 0.6; cursor: progress; }
+
+/* --- левая колонка с номерами --- */
+.stats {
+  grid-area: stats;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 8em;
+}
+.stat { display: flex; flex-direction: column; }
+.stat-label { color: var(--muted); }
+.stat-value { font-variant-numeric: tabular-nums; }
+.stat-found .stat-value { color: var(--accent); }
+
+/* --- цифры π --- */
+.digits-wrap {
+  grid-area: digits;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.digits {
+  position: absolute;
+  inset: 0.2em 0.35em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+  white-space: pre;
+  overflow: hidden;
+}
+.digits .hl { color: var(--accent); font-weight: 600; }
+.digits.loading { opacity: 0.45; transition: opacity 0.2s; }
+
+.status {
+  grid-area: status;
+  margin: 0;
+  min-height: 1.3em;
+  font-size: 0.6em;
+  color: var(--muted);
+}
+.status.err { color: var(--accent); }
+
+.foot {
+  padding: 0.3em 16px 0.6em;
+  font-size: 13px;
+  color: var(--muted);
+}
+.foot a { color: inherit; }
+
+/* --- телефон: номера строкой над цифрами --- */
+@media (max-width: 640px) {
+  :root { --size: 17px; }
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-areas: "search" "stats" "digits" "status";
+    grid-template-rows: auto auto 1fr auto;
+    min-height: 480px;
+  }
+  .invite { flex-basis: 100%; white-space: normal; }
+  #date { flex: 1; width: auto; min-width: 0; }
+  .stats { flex-direction: row; gap: 0.6em; font-size: 0.8em; }
+  .stat { flex: 1; min-width: 0; }
+}

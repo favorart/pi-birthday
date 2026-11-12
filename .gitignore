@@ -1,0 +1,4 @@
+*.txt
+!data/start.txt
+*.ycd
+__pycache__/
