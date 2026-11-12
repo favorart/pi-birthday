@@ -153,7 +153,7 @@ Button(root, text = '5').pack(fill = 'both')
 root.mainloop()
 ```
 
-<!-- IMAGE #1: 1-pack.jpg — drop the file here in place of this line -->
+<img width="134" height="116" alt="1-pack" src="https://github.com/user-attachments/assets/8067aec6-e630-430c-a5fb-5b8891f5f66d" />
 
 **2 grid()** places widgets on a grid. Main parameters:
 
@@ -172,7 +172,8 @@ Button(root, text = '__3__').grid(row = 2, column = 1, columnspan = 2)
 root.mainloop()
 ```
 
-<!-- IMAGE #2: 2-grid.jpg — drop the file here in place of this line -->
+<img width="137" height="94" alt="2-grid" src="https://github.com/user-attachments/assets/1da19342-4b45-406e-ae00-fb29dfd5bc18" />
+
 
 **3 place()** puts widgets at given coordinates with given sizes. Main parameters: x, y, width, height.
 
@@ -185,7 +186,7 @@ Button(root, text = '__3__').place(x = 20, y = 40)
 root.mainloop()
 ```
 
-<!-- IMAGE #3: 3-place.jpg — drop the file here in place of this line -->
+<img width="139" height="139" alt="3-place" src="https://github.com/user-attachments/assets/f6ecb75e-e579-4d53-a7a9-653519d72954" />
 
 Until you call a packer for a widget, it is, naturally, not shown.
 
@@ -259,7 +260,7 @@ All that's left is a small thing — the graphical interface.
 
 The interface plan:
 
-<!-- IMAGE #4: plan.jpg — drop the file here in place of this line -->
+<img width="807" height="579" alt="plan" src="https://github.com/user-attachments/assets/a718d644-af95-4aa8-8da3-48d56f8265bd" />
 
 1.  Fix the minimum window size.
 2.  Validated date input, so that an invalid date cannot be entered.
@@ -493,7 +494,7 @@ Source: [legacy/pi.py, line 107](legacy/pi.py#L107)
 
 The coefficient puts the end of the text as close as possible to the end of the widget, but of course it is sometimes off:
 
-<!-- IMAGE #5: font_height.jpg — drop the file here in place of this line -->
+<img width="1071" height="105" alt="font_height" src="https://github.com/user-attachments/assets/c2254737-5e6c-4251-9eeb-fe905d76fc0d" />
 
 3\. `Text` can wrap by characters by itself.
 
@@ -833,13 +834,12 @@ Source: [legacy/pi.py, lines 140–141](legacy/pi.py#L140-L141)
 
 The full code is in [legacy/pi.py](legacy/pi.py).
 
-<!-- IMAGE #6: interface.jpg — drop the file here in place of this line -->
+<img width="1080" height="557" alt="interface" src="https://github.com/user-attachments/assets/81283f68-b27a-4b1d-8242-a384d49153bd" />
 
 ### Localization
 
 Instead of hard-coded strings, the strings are read from a configuration file: [legacy/pi.py, lines 175–187](legacy/pi.py#L175-L187).
 
-<!-- IMAGE #7: localize.jpg — drop the file here in place of this line -->
 
 ### Executable
 
