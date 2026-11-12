@@ -174,7 +174,6 @@ root.mainloop()
 
 <img width="137" height="94" alt="2-grid" src="https://github.com/user-attachments/assets/1da19342-4b45-406e-ae00-fb29dfd5bc18" />
 
-
 **3 place()** puts widgets at given coordinates with given sizes. Main parameters: x, y, width, height.
 
 ```python
@@ -840,6 +839,7 @@ The full code is in [legacy/pi.py](legacy/pi.py).
 
 Instead of hard-coded strings, the strings are read from a configuration file: [legacy/pi.py, lines 175–187](legacy/pi.py#L175-L187).
 
+<img width="1080" height="565" alt="localize" src="https://github.com/user-attachments/assets/36be95e5-22fa-42e1-982e-cf63ec3ea86a" />
 
 ### Executable
 
