@@ -7,6 +7,7 @@
 Enter your date of birth and the site shows where it first appears among the digits of π.
 This is the web version of a desktop Tkinter app once made for a science festival.
 How that first version was built is described in the article [“A GUI application in Python”](article.md).
+How the site finds any date without storing a single digit of π: [“Three billion digits of π you don't need to store”](article-2026.md) (2026).
 
 The interface is available in 10 languages: English, 中文, Español, हिन्दी, العربية, Português, Русский, 日本語, Deutsch, Français.
 The language is picked from the browser settings; it can be switched at the bottom of the page or with `?lang=xx`.
