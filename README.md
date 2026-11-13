@@ -40,3 +40,7 @@ A link like `https://favorart.github.io/pi-birthday/#14.03.1992` searches for th
 3. Commit `data/` and push: GitHub Pages updates by itself.
 
 To test without y-cruncher: `python tools/gen_test_digits.py 1000000 pi-1m.txt` computes a million digits in about a minute.
+
+## License
+
+[MIT](LICENSE): written by Claude while a human nodded approvingly, use it however you like.

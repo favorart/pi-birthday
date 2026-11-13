@@ -19,7 +19,7 @@ const $ = (id) => document.getElementById(id);
 const el = {
   form: $("form"), date: $("date"), find: $("find"),
   first: $("first"), found: $("found"), last: $("last"),
-  digits: $("digits"), status: $("status"), foot: $("foot-text"), lang: $("lang"),
+  digits: $("digits"), status: $("status"), foot: $("foot-text"), copy: $("copy"), lang: $("lang"),
 };
 
 const blocks = new Map();           // block number -> Promise<string>
@@ -64,6 +64,7 @@ function applyLang() {
   }
   el.date.placeholder = t.fmt;
   el.foot.innerHTML = fill(t.foot, { wiki: t.wiki, n: meta ? num(meta.digits) : "…" });
+  el.copy.innerHTML = fill(t.copy, { mit: LICENSE_URL });
   el.lang.value = lang;
   renderStatus();
   renderStats();

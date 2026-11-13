@@ -145,6 +145,11 @@ button:disabled { opacity: 0.6; cursor: progress; }
   color: var(--muted);
 }
 .foot a { color: inherit; }
+.copy {
+  margin: 0.4em 0 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
 #lang {
   font: inherit;
   margin-inline-end: 0.5em;

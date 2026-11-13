@@ -1,14 +1,17 @@
 "use strict";
 /*
  * UI strings. {date}, {pos}, {n}, {err}, {fmt} are placeholders.
+ * `copy` is HTML: {mit} is the license link.
  * `foot` is HTML: {wiki} is the language's "normal number" article, {n} the searched digit count.
  */
 const REPO = "https://github.com/favorart/pi-birthday";
+const LICENSE_URL = `${REPO}/blob/main/LICENSE`;
 const WIKI_EN = "https://en.wikipedia.org/wiki/Normal_number";
 
 const I18N = {
   en: {
     name: "English",
+    copy: '© 2018–2026 · Written by Claude while a human nodded approvingly. All rights reserved and instantly given away under the <a href="{mit}">MIT license</a>: take it, nobody minds. π itself is © the Universe.',
     title: "Your birthday in π",
     description: "Enter your date of birth and find out where it first appears in the digits of π.",
     invite: "Enter your date of birth",
@@ -29,6 +32,7 @@ const I18N = {
   },
   zh: {
     name: "中文",
+    copy: '© 2018–2026 · 代码由 Claude 编写，人类在一旁点头称是。保留所有权利，并立即按 <a href="{mit}">MIT 许可证</a>全部送出：谁想用都行。π 本身的版权归宇宙所有。',
     title: "π 中的你的生日",
     description: "输入你的出生日期，看看它在 π 的数字中首次出现在哪里。",
     invite: "输入你的出生日期",
@@ -49,6 +53,7 @@ const I18N = {
   },
   es: {
     name: "Español",
+    copy: '© 2018–2026 · Escrito por Claude mientras un humano asentía. Todos los derechos reservados y regalados al instante bajo la <a href="{mit}">licencia MIT</a>: úselo quien quiera. π es © del Universo.',
     title: "Tu cumpleaños en π",
     description: "Introduce tu fecha de nacimiento y descubre dónde aparece por primera vez entre las cifras de π.",
     invite: "Introduce tu fecha de nacimiento",
@@ -69,6 +74,7 @@ const I18N = {
   },
   hi: {
     name: "हिन्दी",
+    copy: '© 2018–2026 · कोड Claude ने लिखा, इंसान सहमति में सिर हिलाता रहा। सर्वाधिकार सुरक्षित, और तुरंत <a href="{mit}">MIT लाइसेंस</a> के तहत सबको दे दिए गए: जो चाहे इस्तेमाल करे। π का कॉपीराइट ब्रह्मांड के पास है।',
     title: "π में आपकी जन्मतिथि",
     description: "अपनी जन्मतिथि दर्ज करें और जानें कि वह π के अंकों में पहली बार कहाँ आती है।",
     invite: "अपनी जन्मतिथि दर्ज करें",
@@ -89,6 +95,7 @@ const I18N = {
   },
   ar: {
     name: "العربية",
+    copy: '© 2018–2026 · كتبه Claude بينما كان إنسان يومئ موافقًا. جميع الحقوق محفوظة، ثم وُهبت فورًا بموجب <a href="{mit}">رخصة MIT</a>: استخدمه من شاء. أما π نفسه فحقوقه للكون.',
     dir: "rtl",
     title: "تاريخ ميلادك في π",
     description: "أدخل تاريخ ميلادك واكتشف أين يظهر لأول مرة بين أرقام π.",
@@ -110,6 +117,7 @@ const I18N = {
   },
   pt: {
     name: "Português",
+    copy: '© 2018–2026 · Escrito pelo Claude enquanto um humano acenava com a cabeça. Todos os direitos reservados e logo doados sob a <a href="{mit}">licença MIT</a>: use quem quiser. O π em si é © do Universo.',
     title: "Seu aniversário em π",
     description: "Digite sua data de nascimento e descubra onde ela aparece pela primeira vez nos dígitos de π.",
     invite: "Digite sua data de nascimento",
@@ -130,6 +138,7 @@ const I18N = {
   },
   ru: {
     name: "Русский",
+    copy: '© 2018–2026 · Написал Claude, человек одобрительно кивал. Все права защищены и тут же розданы по <a href="{mit}">лицензии MIT</a>: пользуйтесь, кто хотите. Права на само π принадлежат Вселенной.',
     title: "Дата рождения в π",
     description: "Введите дату рождения и узнайте, на каком знаке числа π она встречается впервые.",
     invite: "Введите вашу дату рождения",
@@ -150,6 +159,7 @@ const I18N = {
   },
   ja: {
     name: "日本語",
+    copy: '© 2018–2026 · コードは Claude が書き、人間は横でうなずいていました。著作権はすべて保有し、即座に <a href="{mit}">MIT ライセンス</a>で手放しました。どなたでもご自由に。π そのものの著作権は宇宙にあります。',
     title: "π の中のあなたの誕生日",
     description: "生年月日を入力すると、それが π の数字の中で最初に現れる位置がわかります。",
     invite: "生年月日を入力してください",
@@ -170,6 +180,7 @@ const I18N = {
   },
   de: {
     name: "Deutsch",
+    copy: '© 2018–2026 · Geschrieben von Claude, während ein Mensch zustimmend nickte. Alle Rechte vorbehalten und sofort unter der <a href="{mit}">MIT-Lizenz</a> verschenkt: Nehmt es, wer will. π selbst ist © das Universum.',
     title: "Dein Geburtstag in π",
     description: "Gib dein Geburtsdatum ein und finde heraus, wo es in den Ziffern von π zum ersten Mal vorkommt.",
     invite: "Gib dein Geburtsdatum ein",
@@ -190,6 +201,7 @@ const I18N = {
   },
   fr: {
     name: "Français",
+    copy: '© 2018–2026 · Écrit par Claude pendant qu’un humain hochait la tête. Tous droits réservés, puis aussitôt cédés sous <a href="{mit}">licence MIT</a> : servez-vous. π lui-même est © l’Univers.',
     title: "Votre anniversaire dans π",
     description: "Entrez votre date de naissance et découvrez où elle apparaît pour la première fois dans les décimales de π.",
     invite: "Entrez votre date de naissance",
