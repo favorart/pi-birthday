@@ -10,10 +10,16 @@
 </head>
 <body>
   <main class="app">
+    <header class="head">
+      <h1 data-i18n="h1">Find your birthday in π</h1>
+      <p class="lead" id="lead"></p>
+    </header>
+
     <form class="search" id="form" autocomplete="off">
       <label for="date" class="invite" data-i18n="invite">Enter your date of birth</label>
       <input id="date" type="text" inputmode="numeric" placeholder="DD.MM.YYYY" maxlength="10" spellcheck="false" dir="ltr" aria-describedby="status">
       <button type="submit" id="find" data-i18n="find">Find</button>
+      <button type="button" id="reset" class="reset" data-i18n="reset" hidden>Reset</button>
     </form>
 
     <aside class="stats">

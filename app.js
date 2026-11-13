@@ -17,7 +17,7 @@ const MAX_CELLS = 6000;             // guard against huge screens
 
 const $ = (id) => document.getElementById(id);
 const el = {
-  form: $("form"), date: $("date"), find: $("find"),
+  form: $("form"), date: $("date"), find: $("find"), reset: $("reset"), lead: $("lead"),
   first: $("first"), found: $("found"), last: $("last"),
   digits: $("digits"), status: $("status"), foot: $("foot-text"), copy: $("copy"), lang: $("lang"),
 };
@@ -64,6 +64,7 @@ function applyLang() {
   }
   el.date.placeholder = t.fmt;
   el.foot.innerHTML = fill(t.foot, { wiki: t.wiki, n: meta ? num(meta.digits) : "…" });
+  el.lead.innerHTML = fill(t.lead, { article: `${REPO}/blob/main/${lang === "ru" ? "article.ru.md" : "article.md"}` });
   el.copy.innerHTML = fill(t.copy, { mit: LICENSE_URL });
   el.lang.value = lang;
   renderStatus();
@@ -86,6 +87,7 @@ function renderStatus() {
   if (typeof p.pos === "number") p.pos = num(p.pos);
   if (typeof p.n === "number") p.n = num(p.n);
   el.status.textContent = fill(tr()[status.key], p);
+  if (typeof updateReset === "function") updateReset();
   el.status.classList.toggle("err", status.isErr);
 }
 
@@ -188,6 +190,22 @@ function onDateInput() {
     el.date.classList.add("bad");
   }
   el.date.value = fmt(lastGood);
+  updateReset();
+}
+
+const updateReset = () => { el.reset.hidden = !el.date.value && view.pos === null && !status; };
+
+// Back to the start screen: empty input, π from the beginning.
+function reset() {
+  lastGood = "";
+  el.date.value = "";
+  currentDateDigits = "";
+  view.pos = null;
+  setStatus(null);
+  history.replaceState(null, "", location.pathname + location.search);
+  updateReset();
+  refresh();
+  el.date.focus();
 }
 
 function parseDate(s) {
@@ -216,7 +234,7 @@ function layoutWindow(cells) {
   if (view.pos === null) {
     return { start: 0, count: cells - ELLIPSIS - 1 };   // −1: the point after "3"
   }
-  let count = cells - ELLIPSIS;
+  let count = cells - ELLIPSIS;   // leading and trailing "…"
   const before = Math.round(view.rel * Math.max(0, count - 8));
   let start = view.pos - before;
   if (start <= 0) {                     // the date is at the very beginning of π
@@ -227,7 +245,7 @@ function layoutWindow(cells) {
 }
 
 function renderDigits(digits, start, perLine) {
-  const cells = [];
+  const cells = start > 0 ? [{ ch: "…", hl: false }] : [];
   for (let i = 0; i < digits.length; i++) {
     const p = start + i;
     const hl = view.pos !== null && p >= view.pos && p < view.pos + 8;
@@ -342,6 +360,7 @@ async function init() {
 
   el.date.addEventListener("input", onDateInput);
   el.form.addEventListener("submit", search);
+  el.reset.addEventListener("click", reset);
 
   let t = 0;
   new ResizeObserver(() => {
@@ -357,7 +376,8 @@ async function init() {
   await loadStart();
 
   window.addEventListener("hashchange", () => {
-    if (location.hash.slice(1) !== el.date.value) searchFromHash();
+    if (!location.hash) reset();
+    else if (location.hash.slice(1) !== el.date.value) searchFromHash();
   });
   if (!(await searchFromHash())) await refresh();
   el.date.focus();

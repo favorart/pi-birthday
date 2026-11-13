@@ -1,6 +1,7 @@
 "use strict";
 /*
  * UI strings. {date}, {pos}, {n}, {err}, {fmt} are placeholders.
+ * `lead` is HTML: {article} is the explanatory article.
  * `copy` is HTML: {mit} is the license link.
  * `foot` is HTML: {wiki} is the language's "normal number" article, {n} the searched digit count.
  */
@@ -11,6 +12,9 @@ const WIKI_EN = "https://en.wikipedia.org/wiki/Normal_number";
 const I18N = {
   en: {
     name: "English",
+    h1: 'Find your birthday in π',
+    lead: 'Every date is hidden somewhere in the digits of π. Enter yours to see where it first appears. <a href="{article}">How it works</a>',
+    reset: 'Reset',
     copy: '© 2018–2026 · Written by Claude while a human nodded approvingly. All rights reserved and instantly given away under the <a href="{mit}">MIT license</a>: take it, nobody minds. π itself is © the Universe.',
     title: "Your birthday in π",
     description: "Enter your date of birth and find out where it first appears in the digits of π.",
@@ -32,6 +36,9 @@ const I18N = {
   },
   zh: {
     name: "中文",
+    h1: '在 π 中找到你的生日',
+    lead: '每个日期都藏在 π 的数字中的某处。输入你的生日，看看它第一次出现在哪里。<a href="{article}">原理介绍</a>',
+    reset: '重置',
     copy: '© 2018–2026 · 代码由 Claude 编写，人类在一旁点头称是。保留所有权利，并立即按 <a href="{mit}">MIT 许可证</a>全部送出：谁想用都行。π 本身的版权归宇宙所有。',
     title: "π 中的你的生日",
     description: "输入你的出生日期，看看它在 π 的数字中首次出现在哪里。",
@@ -53,6 +60,9 @@ const I18N = {
   },
   es: {
     name: "Español",
+    h1: 'Encuentra tu cumpleaños en π',
+    lead: 'Cada fecha se esconde en algún lugar de las cifras de π. Escribe la tuya y mira dónde aparece por primera vez. <a href="{article}">Cómo funciona</a>',
+    reset: 'Restablecer',
     copy: '© 2018–2026 · Escrito por Claude mientras un humano asentía. Todos los derechos reservados y regalados al instante bajo la <a href="{mit}">licencia MIT</a>: úselo quien quiera. π es © del Universo.',
     title: "Tu cumpleaños en π",
     description: "Introduce tu fecha de nacimiento y descubre dónde aparece por primera vez entre las cifras de π.",
@@ -74,6 +84,9 @@ const I18N = {
   },
   hi: {
     name: "हिन्दी",
+    h1: 'π में अपना जन्मदिन खोजें',
+    lead: 'हर तारीख π के अंकों में कहीं न कहीं छिपी है। अपनी तारीख डालें और देखें कि वह पहली बार कहाँ आती है। <a href="{article}">यह कैसे काम करता है</a>',
+    reset: 'रीसेट',
     copy: '© 2018–2026 · कोड Claude ने लिखा, इंसान सहमति में सिर हिलाता रहा। सर्वाधिकार सुरक्षित, और तुरंत <a href="{mit}">MIT लाइसेंस</a> के तहत सबको दे दिए गए: जो चाहे इस्तेमाल करे। π का कॉपीराइट ब्रह्मांड के पास है।',
     title: "π में आपकी जन्मतिथि",
     description: "अपनी जन्मतिथि दर्ज करें और जानें कि वह π के अंकों में पहली बार कहाँ आती है।",
@@ -95,6 +108,9 @@ const I18N = {
   },
   ar: {
     name: "العربية",
+    h1: 'ابحث عن عيد ميلادك في π',
+    lead: 'كل تاريخ مختبئ في مكان ما بين أرقام π. أدخل تاريخك لترى أين يظهر أول مرة. <a href="{article}">كيف يعمل</a>',
+    reset: 'إعادة ضبط',
     copy: '© 2018–2026 · كتبه Claude بينما كان إنسان يومئ موافقًا. جميع الحقوق محفوظة، ثم وُهبت فورًا بموجب <a href="{mit}">رخصة MIT</a>: استخدمه من شاء. أما π نفسه فحقوقه للكون.',
     dir: "rtl",
     title: "تاريخ ميلادك في π",
@@ -117,6 +133,9 @@ const I18N = {
   },
   pt: {
     name: "Português",
+    h1: 'Encontre seu aniversário em π',
+    lead: 'Toda data está escondida em algum lugar entre os dígitos de π. Digite a sua e veja onde ela aparece pela primeira vez. <a href="{article}">Como funciona</a>',
+    reset: 'Limpar',
     copy: '© 2018–2026 · Escrito pelo Claude enquanto um humano acenava com a cabeça. Todos os direitos reservados e logo doados sob a <a href="{mit}">licença MIT</a>: use quem quiser. O π em si é © do Universo.',
     title: "Seu aniversário em π",
     description: "Digite sua data de nascimento e descubra onde ela aparece pela primeira vez nos dígitos de π.",
@@ -138,6 +157,9 @@ const I18N = {
   },
   ru: {
     name: "Русский",
+    h1: 'Найдите свой день рождения в π',
+    lead: 'Любая дата спрятана где-то среди цифр π. Введите свою и увидите, на каком месте она появляется впервые. <a href="{article}">Как это устроено</a>',
+    reset: 'Сброс',
     copy: '© 2018–2026 · Написал Claude, человек одобрительно кивал. Все права защищены и тут же розданы по <a href="{mit}">лицензии MIT</a>: пользуйтесь, кто хотите. Права на само π принадлежат Вселенной.',
     title: "Дата рождения в π",
     description: "Введите дату рождения и узнайте, на каком знаке числа π она встречается впервые.",
@@ -159,6 +181,9 @@ const I18N = {
   },
   ja: {
     name: "日本語",
+    h1: 'π の中にあなたの誕生日を探そう',
+    lead: 'どんな日付も π の数字のどこかに隠れています。誕生日を入力すると、最初に現れる位置がわかります。<a href="{article}">仕組み</a>',
+    reset: 'リセット',
     copy: '© 2018–2026 · コードは Claude が書き、人間は横でうなずいていました。著作権はすべて保有し、即座に <a href="{mit}">MIT ライセンス</a>で手放しました。どなたでもご自由に。π そのものの著作権は宇宙にあります。',
     title: "π の中のあなたの誕生日",
     description: "生年月日を入力すると、それが π の数字の中で最初に現れる位置がわかります。",
@@ -180,6 +205,9 @@ const I18N = {
   },
   de: {
     name: "Deutsch",
+    h1: 'Finde deinen Geburtstag in π',
+    lead: 'Jedes Datum steckt irgendwo in den Ziffern von π. Gib deins ein und sieh, wo es zum ersten Mal auftaucht. <a href="{article}">Wie es funktioniert</a>',
+    reset: 'Zurücksetzen',
     copy: '© 2018–2026 · Geschrieben von Claude, während ein Mensch zustimmend nickte. Alle Rechte vorbehalten und sofort unter der <a href="{mit}">MIT-Lizenz</a> verschenkt: Nehmt es, wer will. π selbst ist © das Universum.',
     title: "Dein Geburtstag in π",
     description: "Gib dein Geburtsdatum ein und finde heraus, wo es in den Ziffern von π zum ersten Mal vorkommt.",
@@ -201,6 +229,9 @@ const I18N = {
   },
   fr: {
     name: "Français",
+    h1: 'Trouvez votre anniversaire dans π',
+    lead: 'Chaque date se cache quelque part dans les décimales de π. Saisissez la vôtre pour voir où elle apparaît en premier. <a href="{article}">Comment ça marche</a>',
+    reset: 'Réinitialiser',
     copy: '© 2018–2026 · Écrit par Claude pendant qu’un humain hochait la tête. Tous droits réservés, puis aussitôt cédés sous <a href="{mit}">licence MIT</a> : servez-vous. π lui-même est © l’Univers.',
     title: "Votre anniversaire dans π",
     description: "Entrez votre date de naissance et découvrez où elle apparaît pour la première fois dans les décimales de π.",
