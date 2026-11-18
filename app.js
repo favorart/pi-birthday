@@ -172,7 +172,7 @@ function prefixOk(s) {
   }
   if (s.length === 8) {
     const d = +s.slice(0, 2), m = +s.slice(2, 4), y = +s.slice(4);
-    if (y < 1 || d > daysIn(m, y)) return false;
+    if (d > daysIn(m, y)) return false;    // year 0000 is allowed (proleptic Gregorian, leap)
   }
   return true;
 }

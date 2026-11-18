@@ -30,9 +30,9 @@ POW10 = [10 ** k for k in range(8)]
 
 
 def all_dates():
-    """All existing dates 0001-01-01 .. 9999-12-31 (proleptic Gregorian)."""
+    """All existing dates 0000-01-01 .. 9999-12-31 (proleptic Gregorian; year 0000 = 1 BC, a leap year)."""
     ys, ms, ds = [], [], []
-    for y in range(1, 10000):
+    for y in range(0, 10000):
         for m in range(1, 13):
             for d in range(1, calendar.monthrange(y, m)[1] + 1):
                 ys.append(y)
