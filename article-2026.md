@@ -15,7 +15,7 @@ _And how do you find your birthday without storing a single digit of π?_
 
 [π](https://en.wikipedia.org/wiki/Pi) is the ratio of a circle's circumference to its diameter, 3.14159265… Its digits after the point never end and never fall into a loop. [Lambert](https://en.wikipedia.org/wiki/Johann_Heinrich_Lambert) proved that back in 1761: π is an [irrational number](https://en.wikipedia.org/wiki/Irrational_number).
 
-Mathematicians believe π is a [normal number](https://en.wikipedia.org/wiki/Normal_number). That means every digit appears in it once in ten times, every pair of digits once in a hundred, every eight digits once in a hundred million. As if someone had rolled the digits of π on a fair ten-sided die!
+Mathematicians believe π is a [normal number](https://en.wikipedia.org/wiki/Normal_number). That means every digit appears in it once in ten times, every pair of digits once in a hundred, every string of eight digits once in a hundred million. As if someone had rolled the digits of π on a fair ten-sided die!
 
 If that's true, then π contains every finite string of digits. Your phone number. Your credit card number. The text of this article in any encoding. A real [Library of Babel](https://en.wikipedia.org/wiki/The_Library_of_Babel) from Borges, only infinite.
 
@@ -35,7 +35,7 @@ Now show it to a child, and from here on they will ask the questions. What about
 
 There are **3,652,059** dates from 01.01.0001 to 31.12.9999, and each one takes a hundred million digits on average. But "on average" is misleading here.
 
-Here is how the dates get collected as we walk along π. The axis is logarithmic, and the middle is what matters: by 69 million digits (10⁸ · ln 2) half the dates are found, by 10⁸ 63 %, by half a billion 99.3 %. The last 0.7 % stretch over another billion digits and more.
+Here is how the dates get collected as we walk along π. The steps on the axis are uneven, and the middle is what matters: by 69 million digits (10⁸ · ln 2) half the dates are found, by 10⁸ 63 %, by half a billion 99.3 %. The last 0.7 % stretch over another billion digits and more.
 
 ```mermaid
 xychart-beta
@@ -51,7 +51,9 @@ What matters is not the average but the **latest** of 3.65 million dates: it dec
 
 A simple argument estimates it. Walk along the digits of π catching dates. While none has been caught, there are N = 3,652,059 traps, and the first date turns up almost at once: on average after 10⁸ / N digits. Then there is one trap fewer, and the next date takes a bit longer. And so on, down to the very last one, caught on its own, which waits the full 10⁸. Add up the waits: 10⁸ · (1/N + 1/(N−1) + … + 1/2 + 1).
 
-The sum in brackets is the [harmonic number](https://en.wikipedia.org/wiki/Harmonic_number) H_N. For large N it is almost exactly ln N + 0.577, where 0.577 is the [Euler–Mascheroni constant](https://en.wikipedia.org/wiki/Euler%27s_constant). For our dates that gives 15.69, so the last date takes roughly 10⁸ · 15.69 ≈ **1.57 billion digits**. That is an estimate on average: in reality the last date may turn up earlier or later. It is the same [coupon collector's problem](https://en.wikipedia.org/wiki/Coupon_collector%27s_problem) as with stickers in chewing gum: the first ones pour in, and the last one takes the longest.
+The sum in brackets is the [harmonic number](https://en.wikipedia.org/wiki/Harmonic_number) H_N. For large N it is almost exactly ln N + 0.577, where 0.577 is the [Euler–Mascheroni constant](https://en.wikipedia.org/wiki/Euler%27s_constant). For our dates that gives 15.69, so the last date takes roughly 10⁸ · 15.69 ≈ **1.57 billion digits**. That is an estimate on average: in reality the last date may turn up earlier or later. It is the [coupon collector's problem](https://en.wikipedia.org/wiki/Coupon_collector%27s_problem), like stickers in chewing gum: the first ones pour in, and the last one takes the longest.
+
+The tail shows up if you count how many dates first appear in each hundred million digits:
 
 ```mermaid
 xychart-beta
@@ -61,13 +63,13 @@ xychart-beta
     bar [2308102, 850882, 311836, 114660, 42125, 15404, 5825, 2070, 737, 264, 154]
 ```
 
-The histogram shows the same thing as a [distribution](https://en.wikipedia.org/wiki/Exponential_distribution): how many dates first appear in each hundred million digits. The first bar holds over half of all dates, 2.3 million of 3.65, and each next bar is lower by almost exactly e ≈ 2.7. On the right is the long tail: beyond a billion lie the 154 unluckiest dates.
+The first bar holds over half of all dates, 2.3 million of 3.65, and each next bar is lower by almost exactly e ≈ 2.7: that is what an [exponential distribution](https://en.wikipedia.org/wiki/Exponential_distribution) looks like. On the right is the long tail: beyond a billion lie the 154 unluckiest dates.
 
 ## So how does it work?
 
 In 2018 my program (offline) needed a 3 GB text file: three billion digits of π, one byte per digit, computed "just in case", almost twice as many as needed. Plus a 3.65-million-line "date → position" table that Python took 4 seconds to parse!
 
-Now I wanted readers to be able to run the same experiment themselves, so I set out to turn the old program into a web page on GitHub Pages. Except GitHub [doesn't accept files over 100 MB](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github), and my file was thirty times bigger. Looking for a way out turned out to be so much fun that it grew into a new article. Because the site didn't need the file of digits at all! How did that happen?
+Now I wanted readers to be able to run the same experiment themselves, so I set out to turn the old program into a web page on GitHub Pages. Except GitHub [doesn't accept files over 100 MB](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github), and my file was thirty times bigger. Looking for a way out was so much fun that it grew into a new article. Because the site didn't need the file of digits at all! How did that happen?
 
 ## 1. Maybe π can be compressed?
 
@@ -103,19 +105,19 @@ Bottom line: no compressor will squeeze 3 billion digits below **1.25 GB**. And 
 
 The screen never shows 3 billion digits anyway. I opened a screenshot of the 2018 program and counted: 11 lines of 42 digits. That's about **460 digits** per screen, 8 of which are the date itself, which needn't be stored.
 
-So for every date we could store a window of 452 digits around it. Pack the digits three into 10 bits and add 4 bytes for the position:
+So for every date we could store a window of about 450 digits around it. Pack the digits three into 10 bits and add 4 bytes for the position:
 
 | Window around the date | Digits per date | Total for 3.65 million dates |
 |---|---|---|
 | ±20 | 40 | 76 MB |
 | ±50 | 100 | 167 MB |
 | ±100 | 200 | 319 MB |
-| 2018 screen | 452 | **~700 MB** |
+| 2018 screen | ~450 | **~700 MB** |
 | ±400 | 800 | 1.23 GB |
 | screen, date anywhere | 904 | 1.39 GB |
 | ±500 | 1000 | 1.54 GB |
 
-The 2018 screen fits, but only just, and every site update turns into uploading hundreds of megabytes. And if you show the date at a random spot on the screen, like the original did, the window doubles. Already at ±400 digits the windows weigh the same 1.25 GB as the whole of π we were trying to get away from.
+The 2018 screen fits, but only just, and every site update turns into uploading hundreds of megabytes. And if you show the date at a random spot on the screen, like the original did, the window doubles. Already at ±400 digits all the windows together weigh almost the same 1.25 GB as the whole of π we were trying to get away from.
 
 ## 3. What if we don't store π at all?
 
@@ -123,7 +125,7 @@ Someone already stores the digits of π. In 2022 Google Cloud [computed 100 tril
 
 The index becomes trivial: for every date one 32-bit number -- the digit after the decimal point where the date starts. 3 billion fits into 32 bits (4.29 billion), so 4 bytes per date.
 
-The layout is 100 files, one per century. Inside: 100 years × 12 months × 31 days × 4 bytes = **148,800 bytes**. A date's address is a single formula, no searching at all: cell number = year within the century × 372 + (month − 1) × 31 + (day − 1). You pay for it with empty cells for 30 February, 31 April and other days that don't exist: 67,941 of them, 1.8 % of the index.
+The layout is 100 files, one per century. Inside: 100 years × 12 months × 31 days × 4 bytes = **148,800 bytes**. A date's address is a single formula, no searching at all: cell number = year within the century × 372 + (month − 1) × 31 + (day − 1). You pay for it with empty cells for 30 February, 31 April and other days that don't exist: 67,941 of them, 1.8 % of the index. For my date the browser downloads one century file and makes two API requests: the screen around 40,535,034 crosses a thousand boundary.
 
 ```mermaid
 sequenceDiagram
@@ -177,9 +179,11 @@ xychart-beta
 
 _Red line: the final division; blue: conversion to a string; green: the square root; grey: the series itself._
 
-The series itself is the cheapest part! The longest step is one single division at the very end. Division, square root and string conversion of big integers in CPython 3.8 use schoolbook, quadratic algorithms. String conversion is so slow that in 2022 it was declared a vulnerability -- [CVE-2020-10735](https://nvd.nist.gov/vuln/detail/CVE-2020-10735), its number reserved back in 2020. Since Python 3.11 a number longer than 4300 digits simply refuses to be printed by default. Now let's multiply: three billion is 3,750 times more than 800 thousand, and squaring that gives a factor of 14 million. In pure Python my laptop would be computing π for **about 36 years**.
+The series itself is the cheapest part! The longest step is one single division at the very end. Division, square root and string conversion of big integers in CPython 3.8 use schoolbook, quadratic algorithms. String conversion is so slow that in 2022 it was declared a vulnerability -- [CVE-2020-10735](https://nvd.nist.gov/vuln/detail/CVE-2020-10735), its number reserved back in 2020. Since autumn 2022 Python (3.11 and updates of older versions) simply refuses by default to print a number longer than 4300 digits.
 
-So I took [y-cruncher](http://www.numberworld.org/y-cruncher/), the program used to set world records for π. Even in its humblest mode (one thread, 4 GB of RAM, the rest on disk) it computed 3 billion digits in **20 minutes**. In the same 81 seconds y-cruncher produces about 240 million digits.
+Now let's multiply: three billion is 3,750 times more than 800 thousand, and squaring that gives a factor of 14 million. In pure Python my laptop would be computing π for **about 36 years**.
+
+So I took [y-cruncher](http://www.numberworld.org/y-cruncher/), the program used to set world records for π. Even in its humblest mode (one thread, 4 GB of RAM, the rest on disk) it computed 3 billion digits in **20 minutes**. In the same minute and a half y-cruncher produces about 240 million digits.
 
 ## 5. How do you find 3.65 million dates in 3 billion digits?
 
@@ -210,20 +214,20 @@ All 3,652,059 dates were found. And π behaved exactly as the theory of random d
 | Latest date | ~1,568,800,000 | 1,669,501,859 |
 | Earliest date | ~27 | 63 |
 
-The forecast from the beginning of the article missed the latest date by 6 %, but for a single record that is within the spread. Mean positions per century lie in the 98.0–101.6 million corridor: π neither favours nor slights any era.
+The forecast from the beginning of the article missed the latest date by 6 %, but the spread of such a record is about 130 million digits (π/√6 · 10⁸: π sneaked in here too), so missing by 100 million is normal. Mean positions per century lie in the 98.0–101.6 million corridor: π neither favours nor slights any era.
 
 A few records and curiosities:
 
 - **The earliest** is 23.07.8164, at digit 63: `…5923078164…`. The first thousand digits hold only 33 dates, the first million 36,303, that is 1 %.
-- **The latest** is 12.02.6987, at digit **1,669,501,859**. Runners-up: 17.02.9995 (1.50 billion) and 10.03.6087 (1.46 billion).
-- **01.01.1970**, the start of the [Unix epoch](https://en.wikipedia.org/wiki/Unix_time), is at digit 6,297,536. **01.01.2000** is at 181,946,674, while millennium eve **31.12.1999** is all the way at 498,894,645.
-- **11.11.1111** has the longest expected wait in theory. The string `11111111` overlaps with itself, and its expected waiting time is not 10⁸ but 111,111,110 (the sum of 10ᵏ over all k where the start of the string matches its end -- [Conway's "leading numbers"](https://en.wikipedia.org/wiki/Penney%27s_game)). It turned up at digit 159,090,113 -- later than average, but one date proves nothing. Its relatives `12121212` and `10101010` (12.12.1212 and 10.10.1010) overlap every two digits and wait on average 1 % longer than an ordinary date; 12.12.1212, for instance, was found as early as digit 88,168,706.
+- **The latest** is 12.02.6987, at digit **1,669,501,859**. Next by depth: 17.02.9995 (1.50 billion) and 10.03.6087 (1.46 billion).
+- **01.01.1970**, the start of the [Unix epoch](https://en.wikipedia.org/wiki/Unix_time), is at digit 6,297,536. **01.01.2000** is at 181,946,674, while millennium eve **31.12.1999** is all the way at 498,894,645 -- fewer than 1 % of dates lie deeper.
+- **11.11.1111** has the longest expected wait in theory. The string `11111111` overlaps with itself: ones come in clusters, where one such string is found another is often right next to it, and the gaps between clusters are longer. So its expected waiting time is not 10⁸ but 111,111,110 = 10 + 100 + … + 10⁸ ([Conway's "leading numbers"](https://en.wikipedia.org/wiki/Penney%27s_game)). It turned up at digit 159,090,113 -- later than average, but one date proves nothing. Its relatives `12121212` and `10101010` (12.12.1212 and 10.10.1010) overlap every two digits and wait on average 1 % longer than an ordinary date; 12.12.1212, for instance, was found as early as digit 88,168,706.
 
-I wanted to add Jesus's birthday to the same row of examples: I was sure it was 01.01.0001. Turns out he wasn't: the count of years "from the birth of Christ" was invented in 525 by the monk [Dionysius Exiguus](https://en.wikipedia.org/wiki/Dionysius_Exiguus), and by his reckoning, as it is usually read, Christmas was on 25 December 1 BC, a week before the era began. 1 January is the eighth day after Christmas, the feast of the [Circumcision](https://en.wikipedia.org/wiki/Circumcision_of_Jesus).
+I wanted to add Jesus's birthday to the same row of examples: I was sure it was 01.01.0001. Turns out he wasn't: the count of years "from the birth of Christ" was invented in 525 by the monk [Dionysius Exiguus](https://en.wikipedia.org/wiki/Dionysius_Exiguus), and by his reckoning (as it is usually read) Christmas was on 25 December 1 BC, a week before the era began. 1 January is the eighth day after Christmas, the feast of the [Circumcision](https://en.wikipedia.org/wiki/Circumcision_of_Jesus).
 
-And there is no year zero in our calendar at all: 1 BC is followed directly by AD 1. So the index had no such date either. But astronomers write 1 BC exactly as year zero ([astronomical year numbering](https://en.wikipedia.org/wiki/Astronomical_year_numbering)), so I added it to the site. The date that centuries are counted from, 25.12.0000, turned up only at digit 280,255,197. That is Catholic Christmas, but there is an Orthodox one too. You would think it is 07.01.0001, at digit 166,284,266. But the Orthodox Church uses the [Julian calendar](https://en.wikipedia.org/wiki/Julian_calendar), and in 1 BC the two calendars were only two days apart. So back then Orthodox Christmas fell on 23.12.0000 in our calendar, and it turned up much earlier, at digit 50,494,078.
+And there is no year zero in our calendar at all: 1 BC is followed directly by AD 1. So the index had no dates of year zero either. But astronomers write 1 BC exactly as year zero ([astronomical year numbering](https://en.wikipedia.org/wiki/Astronomical_year_numbering)), so I added it to the site. The date that centuries are counted from, 25.12.0000, turned up only at digit 280,255,197: just 6 % of dates hide deeper. That is Catholic Christmas, but there is an Orthodox one too. You would think it is 07.01.0001, at digit 166,284,266. But the Orthodox Church uses the [Julian calendar](https://en.wikipedia.org/wiki/Julian_calendar), and in 1 BC the two calendars were only two days apart. So back then Orthodox Christmas fell on 23.12.0000 in our calendar, and it turned up much earlier, at digit 50,494,078.
 
-All the figures above were computed without the "lost" year zero, and I didn't recompute them: its 366 dates shift the mean and median by thousandths of a percent and don't touch the records at all.
+All the statistics above were computed without the "lost" year zero, and I didn't recompute them: its 366 dates shift the mean and median by thousandths of a percent and don't touch the records at all.
 
 ## 7. So what's the bottom line?
 
@@ -231,6 +235,6 @@ All the figures above were computed without the "lost" year zero, and I didn't r
 
 The most expensive computation in the project is 20 minutes on one laptop core, and it never needs to run again.
 
-And still nobody has proved that π is normal. But 3,652,059 dates differed from the theory of random digits by hundredths of a percent. That won't become a proof, but believing in the infinite library is much easier now.
+And still nobody has proved that π is normal. But 3,652,059 dates differed from the theory of random digits in mean and median by less than a tenth of a percent. That won't become a proof, but believing in the infinite library is much easier now.
 
 Which date would you check first? Find it here: https://favorart.github.io/pi-birthday/
