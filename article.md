@@ -261,7 +261,7 @@ All that's left is a small thing — the graphical interface.
 
 The interface plan:
 
-<img width="807" height="579" alt="plan" src="https://github.com/user-attachments/assets/a718d644-af95-4aa8-8da3-48d56f8265bd" />
+<img width="807" height="579" alt="plan" src="img/plan-en.png" />
 
 1.  Fix the minimum window size.
 2.  Validated date input, so that an invalid date cannot be entered.
@@ -835,7 +835,7 @@ Source: [legacy/pi.py, lines 140–141](legacy/pi.py#L140-L141)
 
 The full code is in [legacy/pi.py](legacy/pi.py).
 
-<img width="1080" height="557" alt="interface" src="https://github.com/user-attachments/assets/81283f68-b27a-4b1d-8242-a384d49153bd" />
+<img width="1080" height="557" alt="interface" src="img/interface-en.jpg" />
 
 ### Localization
 
