@@ -67,7 +67,7 @@ The first bar holds over half of all dates, 2.3 million of 3.65, and each next b
 
 ## So how does it work?
 
-In 2018 my program (offline) needed a 3 GB text file: three billion digits of π, one byte per digit, computed "just in case", almost twice as many as needed. Plus a 3.65-million-line "date → position" table that Python took 4 seconds to parse!
+In 2018 [my program](article.md) (offline) needed a 3 GB text file: three billion digits of π, one byte per digit, computed "just in case", almost twice as many as needed. Plus a 3.65-million-line "date → position" table that Python took 4 seconds to parse!
 
 Now I wanted readers to be able to run the same experiment themselves, so I set out to turn the old program into a web page on GitHub Pages. Except GitHub [doesn't accept files over 100 MB](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github), and my file was thirty times bigger. Looking for a way out was so much fun that it grew into a new article. Because the site didn't need the file of digits at all! How did that happen?
 
@@ -187,7 +187,7 @@ So I took [y-cruncher](http://www.numberworld.org/y-cruncher/), the program used
 
 ## 5. How do you find 3.65 million dates in 3 billion digits?
 
-The 2018 program walked through π with an 8-digit window: at every step it glued the digits into a "DD.MM.YYYY" string and looked it up in a dictionary. I measured this approach on 2 million digits (on Python 3 already): 0.53 million digits per second, about 54 minutes for the whole pass.
+[The 2018 program](article.md) walked through π with an 8-digit window: at every step it glued the digits into a "DD.MM.YYYY" string and looked it up in a dictionary. I measured this approach on 2 million digits (on Python 3 already): 0.53 million digits per second, about 54 minutes for the whole pass.
 
 And Python 2.7 added its own twist. The position counter when iterating over a string was stored in a 32-bit number -- on Windows even in a 64-bit build -- and at the 2.1 billion mark the program crashed with "iter index too large". The file of digits had to be cut into pieces of a billion.
 

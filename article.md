@@ -4,6 +4,8 @@
 
 _A 2018 article about the first, desktop version (Python 2.7 + Tkinter), translated from Russian. Original publication: [VK](https://vk.ru/@33453621-pi-gui-python). Full code: [legacy/pi.py](legacy/pi.py); to run it today, use [legacy/run.sh](legacy/run.sh)._
 
+_The 2026 sequel, a web version that stores no digits of π: [π stores everything, so I didn't have to store π](article-2026.md)._
+
 Every now and then I need to write a small windowed application. I usually write applications in C++. Back in the day, instead of Qt I learned the Windows API, since my windows were always for Windows, and I believe a native interface is always the best one. I want everything to look organic. WinAPI lets you do anything Windows can do, but a lot has to be written by hand, and there are always some bells and whistles you need.
 
 With WinAPI you cannot drag-and-drop controls with the mouse; Visual Studio has no designer for that layer **:(** (apart from tricky workarounds using dialogs instead of forms). There are higher levels, of course — MFC and WPF. But the first has a very strange and complicated class organization that I really don't want to dig into. And the second is great in every way except that it is C#: if you want to write in C++, you have to use managed code and call .NET framework functions.
@@ -850,6 +852,10 @@ pyinstaller --onefile pi.py --noconsole
 ```
 
 noconsole — Tk is launched from a console, so a terminal shows up before the form; we don't need it, and this flag removes it.
+
+### Eight years later
+
+In 2026 the program moved to the browser, and the site turned out not to need the 3 GB file of π digits at all. How that happened is in the new article: [π stores everything, so I didn't have to store π](article-2026.md).
 
 ### References
 
