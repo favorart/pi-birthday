@@ -2,7 +2,7 @@
 
 [English](article.md) · **Русский**
 
-_Статья 2018 года о первой, десктопной версии (Python 2.7 + Tkinter). Исходная публикация: [ВКонтакте](https://vk.ru/@33453621-pi-gui-python). Полный код — [legacy/pi.py](legacy/pi.py), запустить его сегодня можно скриптом [legacy/run.sh](legacy/run.sh)._
+_Статья 2018 года о первой, десктопной версии (Python 2.7 + Tkinter). Исходная публикация: [ВКонтакте](https://vk.ru/@33453621-pi-gui-python). Полный код — [legacy/pi.py](../legacy/pi.py), запустить его сегодня можно скриптом [legacy/run.sh](../legacy/run.sh)._
 
 _Продолжение 2026 года, веб-версия без хранения цифр π: [π хранит всё, так что хранить π мне не пришлось](article-2026.ru.md)._
 
@@ -92,7 +92,7 @@ lb_text.set("1")
 tk.Label(root, textvariable=lb_text, width=10, font=dFont, anchor=tk.NW)
 ```
 
-Исходник: [legacy/pi.py, стр. 227–230](legacy/pi.py#L227-L230)
+Исходник: [legacy/pi.py, стр. 227–230](../legacy/pi.py#L227-L230)
 
 Параметр `font` меняет вид шрифта, я заранее подготовил более крупный читаемый шрифт интерфейса:
 
@@ -101,7 +101,7 @@ import tkFont
 dFont = tkFont.Font(family="Arial", size=30)
 ```
 
-Исходник: [legacy/pi.py, стр. 211](legacy/pi.py#L211)
+Исходник: [legacy/pi.py, стр. 211](../legacy/pi.py#L211)
 
 Параметр `anchor` определяет выравнивание у виджета — в нашем случае это NORTH-WEST, т.е. текст прижимается к верхнему левому краю виджета.
 
@@ -122,7 +122,7 @@ def bt_find_click(event):
 root.bind('<Return>', bt_find_click)
 ```
 
-Исходник: [legacy/pi.py, стр. 210](legacy/pi.py#L210)
+Исходник: [legacy/pi.py, стр. 210](../legacy/pi.py#L210)
 
 Ему передается имя события и вызываемая функция. Событие со всеми его параметрами будет передано в функцию и присвоено аргументу `event`. В данном случае событием является нажатие на клавишу Enter, что обозначается строкой `'<Return>'`.
 
@@ -251,7 +251,7 @@ fill_db(db, PI, 2000000000, 3000000000, count)
 print
 ```
 
-_Эти подготовительные скрипты в `legacy/` не вошли; в веб-версии их заменяет [tools/build_index.py](tools/build_index.py)._
+_Эти подготовительные скрипты в `legacy/` не вошли; в веб-версии их заменяет [tools/build_index.py](../tools/build_index.py)._
 
 Всё, подготовительный этап пройден.
 
@@ -280,7 +280,7 @@ root.geometry("1280x640") # размер окна по умолчанию при
 root.minsize(680, 340)    # минимальный размер окна, чтобы виджеты не схлопывались в точку
 ```
 
-Исходник: [legacy/pi.py, стр. 206–207](legacy/pi.py#L206-L207)
+Исходник: [legacy/pi.py, стр. 206–207](../legacy/pi.py#L206-L207)
 
 ### Валидация ввода
 
@@ -336,7 +336,7 @@ Example(root).pack(fill="both", expand=True)
 
 Таким образом, из этого всего, мне нужен был только параметр `'%P'` — _совокупный новый ввод_. Если он целиком, при вводе очередного символа, не является датой, то оставляем то, что было введено до последнего символа, иначе добавляем символ к содержимому `Entry`.
 
-Для полной даты используем ту же самую arrow. Итоговый виджет `DateEntry`: [legacy/pi.py, стр. 34–89](legacy/pi.py#L34-L89).
+Для полной даты используем ту же самую arrow. Итоговый виджет `DateEntry`: [legacy/pi.py, стр. 34–89](../legacy/pi.py#L34-L89).
 
 ### Настройка виджета числа π
 
@@ -451,7 +451,7 @@ class WrappingLabel(tk.Text):
 lbt = WrappingLabel(frame, font=dFont, wrap=tk.CHAR, bg=frame["bg"], fg='black')
 ```
 
-Исходник: [legacy/pi.py, стр. 101–134](legacy/pi.py#L101-L134), создание виджета — [стр. 248](legacy/pi.py#L248)
+Исходник: [legacy/pi.py, стр. 101–134](../legacy/pi.py#L101-L134), создание виджета — [стр. 248](../legacy/pi.py#L248)
 
 Идея осталась та же с перехватом события изменения текста, улучшилась её реализация. Несколько пунктов.
 
@@ -465,7 +465,7 @@ if (actual_width  > max_width * max_height):
                                        max_width * max_height)
 ```
 
-Исходник: [legacy/pi.py, стр. 117–121](legacy/pi.py#L117-L121)
+Исходник: [legacy/pi.py, стр. 117–121](../legacy/pi.py#L117-L121)
 
 Т.к. бинарный поиск не имеет параметра `предикат` вычисления ключа, по которому нужно сортировать, пришлось написать `обёртку`.
 
@@ -481,7 +481,7 @@ class KeyList(object):
         return self.key(self.l[index], index)
 ```
 
-Исходник: [legacy/pi.py, стр. 91–99](legacy/pi.py#L91-L99)
+Исходник: [legacy/pi.py, стр. 91–99](../legacy/pi.py#L91-L99)
 
 Вместо буквы — подставляет поиску длину от начала до неё самой.
 
@@ -491,7 +491,7 @@ class KeyList(object):
 self.font_height = 46.8   # вместо self.font.metrics('linespace')
 ```
 
-Исходник: [legacy/pi.py, стр. 107](legacy/pi.py#L107)
+Исходник: [legacy/pi.py, стр. 107](../legacy/pi.py#L107)
 
 Коэффициент максимально близко располагает конец текста к концу виджета, но, конечно, иногда ошибается:
 
@@ -510,7 +510,7 @@ self.tag_add("highlight", "1."+str(index), "1."+str(index+8))
 self.tag_config("highlight", background=frame["bg"], foreground="red")
 ```
 
-Исходник: [legacy/pi.py, стр. 130–131](legacy/pi.py#L130-L131)
+Исходник: [legacy/pi.py, стр. 130–131](../legacy/pi.py#L130-L131)
 
 5\. Запрещаем любую модификацию этого виджета:
 
@@ -518,7 +518,7 @@ self.tag_config("highlight", background=frame["bg"], foreground="red")
 lb3.config(state=tk.DISABLED)
 ```
 
-Исходник: [legacy/pi.py, стр. 255](legacy/pi.py#L255)
+Исходник: [legacy/pi.py, стр. 255](../legacy/pi.py#L255)
 
 Чтобы `Text` не выделялся, как и `Label`, задний фон — `background` — делаем таким же, как цвет главного окна:
 
@@ -533,7 +533,7 @@ LONG_ARRAY = read_pi(1,2500)
 lb3.insert(tk.END, LONG_ARRAY)
 ```
 
-Исходник: [legacy/pi.py, стр. 204](legacy/pi.py#L204) и [стр. 254](legacy/pi.py#L254)
+Исходник: [legacy/pi.py, стр. 204](../legacy/pi.py#L204) и [стр. 254](../legacy/pi.py#L254)
 
 Заменяем данные на нужные в обработчике события:
 
@@ -542,7 +542,7 @@ self.delete(1.0, tk.END)   # сначала удаляю старые данны
 self.insert(tk.END, text)  # затем вставляю новые данные в строку в конец текста
 ```
 
-Исходник: [legacy/pi.py, стр. 125–126](legacy/pi.py#L125-L126)
+Исходник: [legacy/pi.py, стр. 125–126](../legacy/pi.py#L125-L126)
 
 Как можно видеть, данные добавляются не так, как в `Label`, можно добавлять построчно, указывая в какую строку записывать. Я не стал с этим запариваться, работаю лишь с одной строкой.
 
@@ -587,7 +587,7 @@ def bt_find_click(event=None):
     lb3.config(state=tk.DISABLED)      # запрещаем редактирование
 ```
 
-Исходник: [legacy/pi.py, стр. 136–162](legacy/pi.py#L136-L162)
+Исходник: [legacy/pi.py, стр. 136–162](../legacy/pi.py#L136-L162)
 
 Как можно видеть, чтобы модифицировать теперь `Text` даже программно нужно возвращать его сначала в нормальное состояние, менять содержимое, а потом снова отключать возможность модификации.
 
@@ -608,7 +608,7 @@ def read_pi(first,last):
     return PI
 ```
 
-Исходник: [legacy/pi.py, стр. 164–173](legacy/pi.py#L164-L173)
+Исходник: [legacy/pi.py, стр. 164–173](../legacy/pi.py#L164-L173)
 
 ### Размещение объектов
 
@@ -689,7 +689,7 @@ bt_find = tk.Button(frame, text="Find", font=dFont, command=bt_find_click)
 bt_find.grid(column=8, row=0, columnspan=2, sticky=tk.NSEW, pady=0)
 ```
 
-Исходник: [legacy/pi.py, стр. 213–224](legacy/pi.py#L213-L224)
+Исходник: [legacy/pi.py, стр. 213–224](../legacy/pi.py#L213-L224)
 
 Остальные элементы расставил по аналогии. Как видно, `Text` — `lbt` занимает больше всего места:
 
@@ -708,7 +708,7 @@ lbt = WrappingLabel(frame)
 lbt.grid(column=1, row=1, columnspan=9, rowspan=5, sticky=tk.NSEW)
 ```
 
-Исходник: [legacy/pi.py, стр. 225–249](legacy/pi.py#L225-L249)
+Исходник: [legacy/pi.py, стр. 225–249](../legacy/pi.py#L225-L249)
 
 В самом конце установил веса ячеек, чем больше вес, тем сильнее она будет изменять свой размер при масштабировании главного окна.
 
@@ -717,7 +717,7 @@ for y in range(1,11): tk.Grid.columnconfigure(frame, y, weight=1)
 for x in range(2,6): tk.Grid.rowconfigure(frame, x, weight=1)
 ```
 
-Исходник: [legacy/pi.py, стр. 250–253](legacy/pi.py#L250-L253)
+Исходник: [legacy/pi.py, стр. 250–253](../legacy/pi.py#L250-L253)
 
 ### Оптимизация работы программы
 
@@ -779,7 +779,7 @@ pd csvrd 350.0057260714 secs.
 loadtxt  41.6930684601 secs.
 ```
 
-Оставляем csv. Всё равно долго. Итоговый `read_db`: [legacy/pi.py, стр. 189–193](legacy/pi.py#L189-L193).
+Оставляем csv. Всё равно долго. Итоговый `read_db`: [legacy/pi.py, стр. 189–193](../legacy/pi.py#L189-L193).
 
 Тогда я подкатил тяжёлую артиллерию — многопоточность — считывание текстового файла с датами в фоне, пока загружается форма.
 
@@ -793,7 +793,7 @@ class Worker(threading.Thread):
 WORKER = Worker() # создаём экземпляр этого потока, который считывает БД из файла
 ```
 
-Исходник: [legacy/pi.py, стр. 27–32](legacy/pi.py#L27-L32)
+Исходник: [legacy/pi.py, стр. 27–32](../legacy/pi.py#L27-L32)
 
 Для такого случая, что при программировании окон довольно частый — когда хотят, чтобы форма не зависала при производстве сложных вычислений, у библиотеки Tk есть специальные функции. Нас интересует `after()`, которая умеет вызывать через 10 миллисекунд работы цикла событий нашу функцию, здесь `listen_for_result()`.
 
@@ -813,7 +813,7 @@ if __name__ == '__main__':
     root.mainloop()
 ```
 
-Исходник: [legacy/pi.py, стр. 195–200](legacy/pi.py#L195-L200) и [стр. 208–209](legacy/pi.py#L208-L209)
+Исходник: [legacy/pi.py, стр. 195–200](../legacy/pi.py#L195-L200) и [стр. 208–209](../legacy/pi.py#L208-L209)
 
 Которая пробует завершить поток, если он закончил работу, и если ещё нет, снова ставит Tk на ожидание на 10 миллисекунд.
 
@@ -829,17 +829,17 @@ def bt_find_click(event=None):
     # ...
 ```
 
-Исходник: [legacy/pi.py, стр. 140–141](legacy/pi.py#L140-L141)
+Исходник: [legacy/pi.py, стр. 140–141](../legacy/pi.py#L140-L141)
 
 ### Полный исходный текст программы
 
-Полный код — в [legacy/pi.py](legacy/pi.py).
+Полный код — в [legacy/pi.py](../legacy/pi.py).
 
 <img width="1080" height="557" alt="interface" src="https://github.com/user-attachments/assets/81283f68-b27a-4b1d-8242-a384d49153bd" />
 
 ### Локализация
 
-Вместо статичных строк, строки считываются из файла конфигурации: [legacy/pi.py, стр. 175–187](legacy/pi.py#L175-L187).
+Вместо статичных строк, строки считываются из файла конфигурации: [legacy/pi.py, стр. 175–187](../legacy/pi.py#L175-L187).
 
 <img width="1080" height="565" alt="localize" src="https://github.com/user-attachments/assets/36be95e5-22fa-42e1-982e-cf63ec3ea86a" />
 
