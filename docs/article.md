@@ -2,7 +2,7 @@
 
 **English** · [Русский](article.ru.md)
 
-_A 2018 article about the first, desktop version (Python 2.7 + Tkinter), translated from Russian. Original publication: [VK](https://vk.ru/@33453621-pi-gui-python). Full code: [legacy/pi.py](legacy/pi.py); to run it today, use [legacy/run.sh](legacy/run.sh)._
+_A 2018 article about the first, desktop version (Python 2.7 + Tkinter), translated from Russian. Original publication: [VK](https://vk.ru/@33453621-pi-gui-python). Full code: [legacy/pi.py](../legacy/pi.py); to run it today, use [legacy/run.sh](../legacy/run.sh)._
 
 _The 2026 sequel, a web version that stores no digits of π: [π stores everything, so I didn't have to store π](article-2026.md)._
 
@@ -92,7 +92,7 @@ lb_text.set("1")
 tk.Label(root, textvariable=lb_text, width=10, font=dFont, anchor=tk.NW)
 ```
 
-Source: [legacy/pi.py, lines 227–230](legacy/pi.py#L227-L230)
+Source: [legacy/pi.py, lines 227–230](../legacy/pi.py#L227-L230)
 
 The `font` parameter changes the font; I prepared a larger, more readable interface font in advance:
 
@@ -101,7 +101,7 @@ import tkFont
 dFont = tkFont.Font(family="Arial", size=30)
 ```
 
-Source: [legacy/pi.py, line 211](legacy/pi.py#L211)
+Source: [legacy/pi.py, line 211](../legacy/pi.py#L211)
 
 The `anchor` parameter sets the widget's alignment — here it is NORTH-WEST, i.e. the text sticks to the top-left corner of the widget.
 
@@ -122,7 +122,7 @@ def bt_find_click(event):
 root.bind('<Return>', bt_find_click)
 ```
 
-Source: [legacy/pi.py, line 210](legacy/pi.py#L210)
+Source: [legacy/pi.py, line 210](../legacy/pi.py#L210)
 
 It takes the event name and the function to call. The event with all its parameters is passed to the function as the `event` argument. Here the event is pressing the Enter key, written as the string `'<Return>'`.
 
@@ -251,7 +251,7 @@ fill_db(db, PI, 2000000000, 3000000000, count)
 print
 ```
 
-_These preparation scripts are not in `legacy/`; in the web version [tools/build_index.py](tools/build_index.py) replaces them._
+_These preparation scripts are not in `legacy/`; in the web version [tools/build_index.py](../tools/build_index.py) replaces them._
 
 That's it, the preparation stage is done.
 
@@ -280,7 +280,7 @@ root.geometry("1280x640") # default window size at startup
 root.minsize(680, 340)    # minimum window size, so widgets don't collapse into a dot
 ```
 
-Source: [legacy/pi.py, lines 206–207](legacy/pi.py#L206-L207)
+Source: [legacy/pi.py, lines 206–207](../legacy/pi.py#L206-L207)
 
 ### Input validation
 
@@ -336,7 +336,7 @@ Example(root).pack(fill="both", expand=True)
 
 Of all this, I only needed the `'%P'` parameter — _the whole new input_. If, after typing the next character, it is not (the beginning of) a date as a whole, we keep what was typed before that character; otherwise the character is added to the `Entry`.
 
-For a complete date we use the same arrow library. The resulting `DateEntry` widget: [legacy/pi.py, lines 34–89](legacy/pi.py#L34-L89).
+For a complete date we use the same arrow library. The resulting `DateEntry` widget: [legacy/pi.py, lines 34–89](../legacy/pi.py#L34-L89).
 
 ### Setting up the π widget
 
@@ -451,7 +451,7 @@ class WrappingLabel(tk.Text):
 lbt = WrappingLabel(frame, font=dFont, wrap=tk.CHAR, bg=frame["bg"], fg='black')
 ```
 
-Source: [legacy/pi.py, lines 101–134](legacy/pi.py#L101-L134); widget creation — [line 248](legacy/pi.py#L248)
+Source: [legacy/pi.py, lines 101–134](../legacy/pi.py#L101-L134); widget creation — [line 248](../legacy/pi.py#L248)
 
 The idea stayed the same — intercepting the text change event — but the implementation improved. A few points.
 
@@ -465,7 +465,7 @@ if (actual_width  > max_width * max_height):
                                        max_width * max_height)
 ```
 
-Source: [legacy/pi.py, lines 117–121](legacy/pi.py#L117-L121)
+Source: [legacy/pi.py, lines 117–121](../legacy/pi.py#L117-L121)
 
 Since `bisect` has no key parameter for the value to compare by, I had to write a wrapper:
 
@@ -481,7 +481,7 @@ class KeyList(object):
         return self.key(self.l[index], index)
 ```
 
-Source: [legacy/pi.py, lines 91–99](legacy/pi.py#L91-L99)
+Source: [legacy/pi.py, lines 91–99](../legacy/pi.py#L91-L99)
 
 Instead of a letter, it gives the search the width of the text from the beginning up to that letter.
 
@@ -491,7 +491,7 @@ Instead of a letter, it gives the search the width of the text from the beginnin
 self.font_height = 46.8   # instead of self.font.metrics('linespace')
 ```
 
-Source: [legacy/pi.py, line 107](legacy/pi.py#L107)
+Source: [legacy/pi.py, line 107](../legacy/pi.py#L107)
 
 The coefficient puts the end of the text as close as possible to the end of the widget, but of course it is sometimes off:
 
@@ -510,7 +510,7 @@ self.tag_add("highlight", "1."+str(index), "1."+str(index+8))
 self.tag_config("highlight", background=frame["bg"], foreground="red")
 ```
 
-Source: [legacy/pi.py, lines 130–131](legacy/pi.py#L130-L131)
+Source: [legacy/pi.py, lines 130–131](../legacy/pi.py#L130-L131)
 
 5\. Forbid any modification of the widget:
 
@@ -518,7 +518,7 @@ Source: [legacy/pi.py, lines 130–131](legacy/pi.py#L130-L131)
 lb3.config(state=tk.DISABLED)
 ```
 
-Source: [legacy/pi.py, line 255](legacy/pi.py#L255)
+Source: [legacy/pi.py, line 255](../legacy/pi.py#L255)
 
 So that `Text` does not stand out, just like a `Label`, its `background` is set to the color of the main window:
 
@@ -533,7 +533,7 @@ LONG_ARRAY = read_pi(1,2500)
 lb3.insert(tk.END, LONG_ARRAY)
 ```
 
-Source: [legacy/pi.py, line 204](legacy/pi.py#L204) and [line 254](legacy/pi.py#L254)
+Source: [legacy/pi.py, line 204](../legacy/pi.py#L204) and [line 254](../legacy/pi.py#L254)
 
 Replace the data with the needed one in the event handler:
 
@@ -542,7 +542,7 @@ self.delete(1.0, tk.END)   # first delete the old data, starting from char 0 of 
 self.insert(tk.END, text)  # then insert the new data at the end of the text
 ```
 
-Source: [legacy/pi.py, lines 125–126](legacy/pi.py#L125-L126)
+Source: [legacy/pi.py, lines 125–126](../legacy/pi.py#L125-L126)
 
 As you can see, data is added differently than in a `Label`: it can be added line by line, specifying which line to write to. I didn't bother with that and work with a single line only.
 
@@ -587,7 +587,7 @@ def bt_find_click(event=None):
     lb3.config(state=tk.DISABLED)      # forbid editing
 ```
 
-Source: [legacy/pi.py, lines 136–162](legacy/pi.py#L136-L162)
+Source: [legacy/pi.py, lines 136–162](../legacy/pi.py#L136-L162)
 
 As you can see, to modify the `Text` now, even from code, you first have to return it to the normal state, change the content, and then disable modification again.
 
@@ -608,7 +608,7 @@ def read_pi(first,last):
     return PI
 ```
 
-Source: [legacy/pi.py, lines 164–173](legacy/pi.py#L164-L173)
+Source: [legacy/pi.py, lines 164–173](../legacy/pi.py#L164-L173)
 
 ### Layout
 
@@ -689,7 +689,7 @@ bt_find = tk.Button(frame, text="Find", font=dFont, command=bt_find_click)
 bt_find.grid(column=8, row=0, columnspan=2, sticky=tk.NSEW, pady=0)
 ```
 
-Source: [legacy/pi.py, lines 213–224](legacy/pi.py#L213-L224)
+Source: [legacy/pi.py, lines 213–224](../legacy/pi.py#L213-L224)
 
 The other elements were placed the same way. As you can see, the `Text` — `lbt` — takes the most space:
 
@@ -708,7 +708,7 @@ lbt = WrappingLabel(frame)
 lbt.grid(column=1, row=1, columnspan=9, rowspan=5, sticky=tk.NSEW)
 ```
 
-Source: [legacy/pi.py, lines 225–249](legacy/pi.py#L225-L249)
+Source: [legacy/pi.py, lines 225–249](../legacy/pi.py#L225-L249)
 
 At the very end I set the cell weights: the bigger the weight, the more the cell resizes when the main window is scaled.
 
@@ -717,7 +717,7 @@ for y in range(1,11): tk.Grid.columnconfigure(frame, y, weight=1)
 for x in range(2,6): tk.Grid.rowconfigure(frame, x, weight=1)
 ```
 
-Source: [legacy/pi.py, lines 250–253](legacy/pi.py#L250-L253)
+Source: [legacy/pi.py, lines 250–253](../legacy/pi.py#L250-L253)
 
 ### Optimizing the program
 
@@ -779,7 +779,7 @@ pd csvrd 350.0057260714 secs.
 loadtxt  41.6930684601 secs.
 ```
 
-csv wins. Still slow. The final `read_db`: [legacy/pi.py, lines 189–193](legacy/pi.py#L189-L193).
+csv wins. Still slow. The final `read_db`: [legacy/pi.py, lines 189–193](../legacy/pi.py#L189-L193).
 
 So I brought in the heavy artillery — multithreading: read the dates text file in the background while the form loads.
 
@@ -793,7 +793,7 @@ class Worker(threading.Thread):
 WORKER = Worker() # an instance of the thread that reads the DB from the file
 ```
 
-Source: [legacy/pi.py, lines 27–32](legacy/pi.py#L27-L32)
+Source: [legacy/pi.py, lines 27–32](../legacy/pi.py#L27-L32)
 
 For this case, which is quite common in GUI programming — keeping the form responsive during heavy computations — Tk has special functions. We need `after()`, which calls our function, here `listen_for_result()`, after 10 milliseconds of the event loop.
 
@@ -813,7 +813,7 @@ if __name__ == '__main__':
     root.mainloop()
 ```
 
-Source: [legacy/pi.py, lines 195–200](legacy/pi.py#L195-L200) and [lines 208–209](legacy/pi.py#L208-L209)
+Source: [legacy/pi.py, lines 195–200](../legacy/pi.py#L195-L200) and [lines 208–209](../legacy/pi.py#L208-L209)
 
 It tries to join the thread if it has finished, and if not, schedules Tk to wait another 10 milliseconds.
 
@@ -829,17 +829,17 @@ def bt_find_click(event=None):
     # ...
 ```
 
-Source: [legacy/pi.py, lines 140–141](legacy/pi.py#L140-L141)
+Source: [legacy/pi.py, lines 140–141](../legacy/pi.py#L140-L141)
 
 ### Full source code
 
-The full code is in [legacy/pi.py](legacy/pi.py).
+The full code is in [legacy/pi.py](../legacy/pi.py).
 
 <img width="1080" height="557" alt="interface" src="img/interface-en.jpg" />
 
 ### Localization
 
-Instead of hard-coded strings, the strings are read from a configuration file: [legacy/pi.py, lines 175–187](legacy/pi.py#L175-L187).
+Instead of hard-coded strings, the strings are read from a configuration file: [legacy/pi.py, lines 175–187](../legacy/pi.py#L175-L187).
 
 <img width="1080" height="565" alt="localize" src="https://github.com/user-attachments/assets/36be95e5-22fa-42e1-982e-cf63ec3ea86a" />
 

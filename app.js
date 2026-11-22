@@ -64,7 +64,7 @@ function applyLang() {
   }
   el.date.placeholder = t.fmt;
   el.foot.innerHTML = fill(t.foot, { wiki: t.wiki, n: meta ? num(meta.digits) : "…" });
-  el.lead.innerHTML = fill(t.lead, { article: `${REPO}/blob/main/${lang === "ru" ? "article-2026.ru.md" : "article-2026.md"}` });
+  el.lead.innerHTML = fill(t.lead, { article: `${REPO}/blob/main/docs/${lang === "ru" ? "article-2026.ru.md" : "article-2026.md"}` });
   el.copy.innerHTML = fill(t.copy, { mit: LICENSE_URL });
   el.lang.value = lang;
   renderStatus();
